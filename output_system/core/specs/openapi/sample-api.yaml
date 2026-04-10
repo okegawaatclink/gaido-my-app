@@ -1,0 +1,146 @@
+openapi: "3.0.3"
+info:
+  title: Sample REST API
+  description: |
+    サンプル REST API の OpenAPI 定義ファイル。
+
+    このファイルは「接続先システムの OpenAPI 定義の配置場所と記述パターンを示すダミー」です。
+    実際の接続先システムの OpenAPI 定義ファイルをここに配置し、
+    SampleRestClient.java 内のコメントに従って実装を書き換えてください。
+
+    ## 使い方（新規 REST システム接続時）
+    1. このファイルを参考に接続先システムの OpenAPI 定義ファイルを作成する
+       （または接続先から取得した openapi.yaml をそのまま配置してもよい）
+    2. `specs/openapi/{system-name}-api.yaml` にリネームして配置する
+    3. SampleRestClient.java をコピーし、このファイルのパス・スキーマに合わせて実装する
+  version: "1.0.0"
+  contact:
+    name: CreateLink Core Team
+
+servers:
+  - url: http://localhost:8080
+    description: ローカル開発環境（ダミー）
+  - url: https://api.example.co.jp
+    description: 本番環境（ダミー）
+
+paths:
+  /samples/{id}:
+    get:
+      summary: サンプルデータ取得
+      description: |
+        指定した ID のサンプルデータを1件取得する。
+        SampleRestClient.getSampleData() が対応するエンドポイント。
+      operationId: getSampleData
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: 取得対象のリソース ID
+          schema:
+            type: string
+            example: "12345"
+      responses:
+        "200":
+          description: 取得成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SampleResponse"
+        "404":
+          description: リソースが存在しない
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: サーバー内部エラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /samples:
+    post:
+      summary: サンプルデータ登録
+      description: |
+        サンプルデータを新規登録する。
+        SampleRestClient.postSampleData() が対応するエンドポイント。
+      operationId: postSampleData
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SampleRequest"
+      responses:
+        "201":
+          description: 登録成功
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SampleResponse"
+        "400":
+          description: リクエスト形式エラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: サーバー内部エラー
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    SampleRequest:
+      type: object
+      description: サンプルデータ登録リクエスト
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+          description: データ名称
+          example: "サンプルデータ名"
+        value:
+          type: string
+          description: データ値
+          example: "sample-value-001"
+
+    SampleResponse:
+      type: object
+      description: サンプルデータレスポンス
+      properties:
+        id:
+          type: string
+          description: リソース ID
+          example: "12345"
+        name:
+          type: string
+          description: データ名称
+          example: "サンプルデータ名"
+        value:
+          type: string
+          description: データ値
+          example: "sample-value-001"
+        createdAt:
+          type: string
+          format: date-time
+          description: 作成日時
+          example: "2026-01-01T00:00:00Z"
+
+    ErrorResponse:
+      type: object
+      description: エラーレスポンス
+      properties:
+        errorCode:
+          type: string
+          description: エラーコード
+          example: "SAMPLE_001"
+        message:
+          type: string
+          description: エラーメッセージ
+          example: "指定されたリソースが見つかりません"

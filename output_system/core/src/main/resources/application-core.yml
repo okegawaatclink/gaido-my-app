@@ -19,3 +19,44 @@ core:
       # サンプルSOAPサービスのエンドポイントURL
       # ▼ 実際の接続先 URL に変更すること（環境別の設定は application-{profile}.yml で上書き）
       endpoint-url: http://localhost:8080/soap/sample
+
+  # ============================================================
+  # REST 接続クライアント設定
+  # ============================================================
+  rest:
+    # WebClient 共通タイムアウト設定（CoreConfig.java で参照）
+    # 接続先の応答時間に合わせて調整すること
+
+    # HTTP 接続確立タイムアウト（ミリ秒）
+    # ▼ 接続先システムのネットワーク遅延に合わせて変更すること
+    connect-timeout-ms: 5000
+
+    # HTTP レスポンス読み取りタイムアウト（秒）
+    # ▼ 接続先システムの処理時間に合わせて変更すること
+    read-timeout-sec: 30
+
+    # HTTP リクエスト書き込みタイムアウト（秒）
+    # ▼ 大きなリクエストボディを送信する場合は延長すること
+    write-timeout-sec: 30
+
+    # SampleRestClient のベース URL（SampleRestClient.java で参照）
+    # ▼ 新規 REST システム接続時は {system-name} を実際のシステム名に変更すること
+    #   例: core.rest.hogesystem.base-url
+    sample:
+      # ▼ 実際の接続先 URL に変更すること（環境別の設定は application-{profile}.yml で上書き）
+      base-url: http://localhost:8080
+
+  # ============================================================
+  # SSL 設定（オプション）
+  # ============================================================
+  # 企業プロキシ（Netskope, Zscaler 等）を経由する環境で独自 CA 証明書が必要な場合に設定する。
+  # 未設定の場合は JVM デフォルトの cacerts を使用する。
+  ssl:
+    # カスタム TrustStore ファイルパス（JKS または PKCS12 形式）
+    # 未設定の場合はシステム標準の TrustStore を使用する
+    # ▼ 独自CA証明書が必要な場合のみ設定すること
+    # trust-store-path: /path/to/truststore.jks
+
+    # カスタム TrustStore のパスワード
+    # ▼ trust-store-path を設定した場合に必要
+    # trust-store-password: changeit
