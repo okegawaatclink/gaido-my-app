@@ -38,3 +38,6 @@ test-results/
 # 一時ファイル
 *.tmp
 *.temp
+
+# ビルド確認用一時 Dockerfile（CI環境では不要）
+Dockerfile.build

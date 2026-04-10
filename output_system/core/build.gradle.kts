@@ -72,6 +72,22 @@ dependencies {
     implementation("org.springframework:spring-context:6.2.2")
 
     // ----------------------------------------------------------------
+    // Spring WebFlux（Spring WebClient を使った REST 接続のため）
+    // WebClient は Spring 5 以降に導入されたリアクティブ対応 REST クライアント。
+    // spring-boot-starter-webflux に含まれる WebClient.Builder を使って
+    // RESTful API との通信を行う。
+    // spring-webflux 単体を使用（Spring Boot 環境でなくてもビルド可能にするため）。
+    // Process-API 側では spring-boot-starter-webflux を使用してもよい。
+    // ----------------------------------------------------------------
+    // API として公開する（Process-API 側でも WebClient を参照できるようにする）
+    api("org.springframework:spring-webflux:6.2.2")
+
+    // Reactor Netty（WebClient のデフォルト HTTP クライアント実装）
+    // WebClient の実行には HTTP クライアントの実装が必要。
+    // Reactor Netty は Spring WebFlux 標準の非同期 HTTP クライアント。
+    implementation("io.projectreactor.netty:reactor-netty-http:1.2.2")
+
+    // ----------------------------------------------------------------
     // テスト依存関係
     // ----------------------------------------------------------------
     // JUnit 5 (JUnit Jupiter)
