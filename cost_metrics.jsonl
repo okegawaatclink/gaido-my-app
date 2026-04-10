@@ -1,0 +1,1 @@
+{"timestamp": "2026-04-10T05:36:24.809959+00:00", "phase": "開発内容選択フェーズ", "total_cost_usd": 0.4224590000000001, "active_time_seconds": {}, "sessions": {"82b3975a-6f89-4d33-bcba-ed6dee98910c": {"cost_usd": 0.4224590000000001, "models": {"claude-opus-4-6": {"input": 6, "output": 632, "cache_read": 96558, "cache_write": 57336, "cost_usd": 0.4224590000000001}}}}}

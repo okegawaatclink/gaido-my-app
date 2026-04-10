@@ -1,0 +1,18 @@
+time=2026-04-10T05:35:42.838Z level=INFO msg="store watching for external changes" label=settings path=/workspace/target_repo/.pockode/settings.json
+time=2026-04-10T05:35:42.852Z level=INFO msg="seeded default agent roles" count=4
+time=2026-04-10T05:35:42.853Z level=INFO msg="store watching for external changes" label=work path=/workspace/target_repo/.pockode/works/index.json
+time=2026-04-10T05:35:42.853Z level=INFO msg="store watching for external changes" label=agent-role path=/workspace/target_repo/.pockode/agent-roles/index.json
+time=2026-04-10T05:35:42.860Z level=INFO msg="WorktreeWatcher started" mainDir=/workspace/target_repo pollInterval=3s
+time=2026-04-10T05:35:42.861Z level=INFO msg="SettingsWatcher started"
+time=2026-04-10T05:35:42.861Z level=INFO msg="WorkListWatcher started"
+time=2026-04-10T05:35:42.861Z level=INFO msg="WorkDetailWatcher started"
+time=2026-04-10T05:35:42.861Z level=INFO msg="AgentRoleListWatcher started"
+time=2026-04-10T05:35:43.036Z level=INFO msg="server starting" port=9870 workDir=/workspace/target_repo dataDir=/workspace/target_repo/.pockode devMode=false idleTimeout=72h0m0s
+time=2026-04-10T05:37:05.303Z level=INFO msg="shutting down server"
+time=2026-04-10T05:37:05.305Z level=INFO msg="SettingsWatcher stopped"
+time=2026-04-10T05:37:05.305Z level=INFO msg="WorkListWatcher stopped"
+time=2026-04-10T05:37:05.305Z level=INFO msg="WorkDetailWatcher stopped"
+time=2026-04-10T05:37:05.305Z level=INFO msg="AgentRoleListWatcher stopped"
+time=2026-04-10T05:37:05.305Z level=INFO msg="WorktreeWatcher stopped"
+time=2026-04-10T05:37:05.305Z level=INFO msg="manager shutdown complete" worktreesClosed=0
+time=2026-04-10T05:37:05.347Z level=INFO msg="server stopped"
