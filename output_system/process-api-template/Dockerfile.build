@@ -1,0 +1,36 @@
+# Dockerfile.build
+#
+# Process-APIテンプレートのビルド確認専用Dockerfile。
+# WSL環境ではDockerボリュームマウントが使えないため、
+# ソースをCOPYしてコンテナ内でビルドする。
+#
+# ■ 使い方
+#   cd output_system  # ← coreも含めたビルドコンテキストが必要
+#   docker build -f process-api-template/Dockerfile.build .
+#
+# ■ Composite Build用の設定
+#   settings.gradle.ktsのincludeBuild("../core")がCoreを参照するため、
+#   ビルドコンテキストをoutput_system/にしてcoreも一緒にCOPYする必要がある。
+#
+# ■ このファイルは.gitignore対象（ビルド確認専用）
+
+# Gradle 8.12.1 + JDK 21のイメージ（Core側と同一バージョン）
+FROM gradle:8.12.1-jdk21
+
+WORKDIR /workspace
+
+# output_system/全体をコピー（coreとprocess-api-templateの両方が必要）
+COPY core/ core/
+COPY process-api-template/ process-api-template/
+
+WORKDIR /workspace/core
+
+# CoreはSoapクライアントのwsimport生成コードが必要なため先にgenerateSoapSourcesを実行する
+# （HANDOVER.mdの「はまりポイント」参照）
+RUN ./gradlew generateSoapSources --no-daemon
+
+WORKDIR /workspace/process-api-template
+
+# bootWarでWARファイルを生成する
+# Composite Build経由でCoreが自動的にビルドされる
+RUN ./gradlew bootWar --no-daemon
