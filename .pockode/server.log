@@ -16,3 +16,23 @@ time=2026-04-10T05:37:05.305Z level=INFO msg="AgentRoleListWatcher stopped"
 time=2026-04-10T05:37:05.305Z level=INFO msg="WorktreeWatcher stopped"
 time=2026-04-10T05:37:05.305Z level=INFO msg="manager shutdown complete" worktreesClosed=0
 time=2026-04-10T05:37:05.347Z level=INFO msg="server stopped"
+time=2026-04-10T05:37:29.386Z level=INFO msg="store watching for external changes" label=settings path=/workspace/target_repo/.pockode/settings.json
+time=2026-04-10T05:37:29.387Z level=INFO msg="store watching for external changes" label=work path=/workspace/target_repo/.pockode/works/index.json
+time=2026-04-10T05:37:29.387Z level=INFO msg="store watching for external changes" label=agent-role path=/workspace/target_repo/.pockode/agent-roles/index.json
+time=2026-04-10T05:37:29.390Z level=INFO msg="WorktreeWatcher started" mainDir=/workspace/target_repo pollInterval=3s
+time=2026-04-10T05:37:29.390Z level=INFO msg="SettingsWatcher started"
+time=2026-04-10T05:37:29.390Z level=INFO msg="WorkListWatcher started"
+time=2026-04-10T05:37:29.390Z level=INFO msg="WorkDetailWatcher started"
+time=2026-04-10T05:37:29.390Z level=INFO msg="AgentRoleListWatcher started"
+time=2026-04-10T05:37:29.588Z level=INFO msg="server starting" port=9870 workDir=/workspace/target_repo dataDir=/workspace/target_repo/.pockode devMode=false idleTimeout=72h0m0s
+time=2026-04-10T06:09:09.480Z level=INFO msg="new connection" connId=019d7602-3568-7a25-80e1-eccdadb69435
+time=2026-04-10T06:09:09.485Z level=WARN msg="invalid auth token" connId=019d7602-3568-7a25-80e1-eccdadb69435
+time=2026-04-10T06:09:09.485Z level=INFO msg="connection closed" connId=019d7602-3568-7a25-80e1-eccdadb69435
+time=2026-04-10T06:52:55.949Z level=INFO msg="shutting down server"
+time=2026-04-10T06:52:55.949Z level=INFO msg="SettingsWatcher stopped"
+time=2026-04-10T06:52:55.949Z level=INFO msg="WorkListWatcher stopped"
+time=2026-04-10T06:52:55.949Z level=INFO msg="WorkDetailWatcher stopped"
+time=2026-04-10T06:52:55.949Z level=INFO msg="AgentRoleListWatcher stopped"
+time=2026-04-10T06:52:55.949Z level=INFO msg="WorktreeWatcher stopped"
+time=2026-04-10T06:52:55.949Z level=INFO msg="manager shutdown complete" worktreesClosed=0
+time=2026-04-10T06:52:55.984Z level=INFO msg="server stopped"
