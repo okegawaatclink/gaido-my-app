@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  sample-service.wsdl
+
+  ダミーWSDLファイル。JAX-WS wsimport の動作確認とコード生成パターンの参照用。
+
+  ■ このファイルの役割
+    - wsimport コマンドで Java スタブコードを生成するためのサンプル定義
+    - 新規SOAPシステム接続時にこのファイルの構造を参考にして
+      接続先システムの WSDL を specs/wsdl/ に配置する
+
+  ■ 新規SOAPシステム接続時の手順
+    1. 接続先システムから WSDL を取得する
+       例: curl -o specs/wsdl/target-system.wsdl https://target.example.com/service?wsdl
+    2. このファイルの代わりに取得した WSDL を specs/wsdl/ に配置する
+    3. build.gradle.kts の generateSoapSources タスクの wsdlFile と packageName を更新する
+    4. ./gradlew generateSoapSources を実行してスタブを生成する
+
+  ■ WSDL 構成説明
+    - types:         リクエスト/レスポンスのデータ型定義（XSD形式）
+    - message:       操作の入出力メッセージ定義
+    - portType:      サービスが提供するオペレーション（インターフェース）
+    - binding:       プロトコル（SOAP 1.1）とエンコーディングの定義
+    - service:       エンドポイントURL（接続先に合わせて変更すること）
+-->
+<definitions
+    name="SampleService"
+    targetNamespace="http://createlink.co.jp/core/soap/sample"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://createlink.co.jp/core/soap/sample"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <!-- ================================================================
+         types セクション: リクエスト/レスポンスのデータ型を XSD で定義する
+         ================================================================ -->
+    <types>
+        <xsd:schema targetNamespace="http://createlink.co.jp/core/soap/sample">
+
+            <!-- getSampleDataRequest: 検索リクエスト -->
+            <xsd:element name="getSampleDataRequest">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <!-- id: 取得対象のID（接続先システムのキー項目に相当） -->
+                        <xsd:element name="id" type="xsd:string"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- getSampleDataResponse: 検索レスポンス -->
+            <xsd:element name="getSampleDataResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <!-- result: 取得結果（接続先システムのレスポンス構造に合わせて拡張する） -->
+                        <xsd:element name="result" type="tns:SampleData"/>
+                        <!-- statusCode: 処理結果コード（0: 正常, その他: 異常） -->
+                        <xsd:element name="statusCode" type="xsd:string"/>
+                        <!-- message: 処理結果メッセージ -->
+                        <xsd:element name="message" type="xsd:string" minOccurs="0"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <!-- SampleData: レスポンスのデータ本体 -->
+            <xsd:complexType name="SampleData">
+                <xsd:sequence>
+                    <xsd:element name="id" type="xsd:string"/>
+                    <xsd:element name="name" type="xsd:string"/>
+                    <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                    <xsd:element name="updatedAt" type="xsd:dateTime" minOccurs="0"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+        </xsd:schema>
+    </types>
+
+    <!-- ================================================================
+         message セクション: オペレーションの入出力メッセージを定義する
+         ================================================================ -->
+    <!-- getSampleData オペレーションのリクエストメッセージ -->
+    <message name="GetSampleDataRequest">
+        <part name="parameters" element="tns:getSampleDataRequest"/>
+    </message>
+
+    <!-- getSampleData オペレーションのレスポンスメッセージ -->
+    <message name="GetSampleDataResponse">
+        <part name="parameters" element="tns:getSampleDataResponse"/>
+    </message>
+
+    <!-- ================================================================
+         portType セクション: サービスが提供するオペレーションを定義する
+         （Java インターフェースに相当）
+         ================================================================ -->
+    <portType name="SampleServicePortType">
+        <!--
+          getSampleData オペレーション
+          接続先システムのオペレーション名に合わせて名前を変更する
+        -->
+        <operation name="getSampleData">
+            <input message="tns:GetSampleDataRequest"/>
+            <output message="tns:GetSampleDataResponse"/>
+        </operation>
+    </portType>
+
+    <!-- ================================================================
+         binding セクション: プロトコルとエンコーディングを定義する
+         ================================================================ -->
+    <binding name="SampleServiceBinding" type="tns:SampleServicePortType">
+        <!-- SOAP 1.1 バインディング（接続先が SOAP 1.2 の場合は変更が必要） -->
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <operation name="getSampleData">
+            <!-- SOAPAction ヘッダ（接続先に合わせて変更する） -->
+            <soap:operation soapAction="getSampleData" style="document"/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <!-- ================================================================
+         service セクション: サービスのエンドポイント URL を定義する
+         ================================================================ -->
+    <service name="SampleService">
+        <port name="SampleServicePort" binding="tns:SampleServiceBinding">
+            <!--
+              エンドポイント URL
+              ▼ 接続先システムの URL に変更すること
+              ▼ 実際の URL は application-core.yml から注入するパターンを推奨（SampleSoapClient.java 参照）
+            -->
+            <soap:address location="http://localhost:8080/soap/sample"/>
+        </port>
+    </service>
+
+</definitions>

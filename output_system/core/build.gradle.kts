@@ -98,6 +98,11 @@ dependencies {
 tasks.withType<Test> {
     // JUnit Platform (JUnit 5) を使用してテストを実行する
     useJUnitPlatform()
+
+    // Mockito が JVM エージェントを動的ロードする際の警告を抑制する。
+    // Java 21 以降、動的エージェントのロードはデフォルトで警告が出る。
+    // -XX:+EnableDynamicAgentLoading を指定することで警告を抑制する。
+    jvmArgs("-XX:+EnableDynamicAgentLoading")
 }
 
 // ============================================================

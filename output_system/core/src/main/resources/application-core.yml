@@ -1,0 +1,21 @@
+# application-core.yml
+#
+# Coreライブラリの設定ファイル。
+# このファイルのプロパティは Process-API 側の application.yml から
+# spring.config.import: classpath:application-core.yml で読み込む。
+#
+# ■ SOAP エンドポイント URL 設定
+#   各接続先システムのエンドポイント URL をここに定義する。
+#   環境ごとの切り替えは application-{profile}.yml で上書きする。
+#
+# ■ 新規SOAPシステム接続時の手順
+#   1. 接続先システムのプロパティを追加する
+#      例: core.soap.{system-name}.endpoint-url
+#   2. 対応する SoapClient クラスの @Value アノテーションを更新する
+
+core:
+  soap:
+    sample:
+      # サンプルSOAPサービスのエンドポイントURL
+      # ▼ 実際の接続先 URL に変更すること（環境別の設定は application-{profile}.yml で上書き）
+      endpoint-url: http://localhost:8080/soap/sample
