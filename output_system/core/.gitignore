@@ -1,0 +1,40 @@
+# Gradle ビルド成果物
+.gradle/
+build/
+out/
+
+# Gradle Wrapper（JARはバイナリファイルだがバージョン管理に含めることが推奨）
+# gradle-wrapper.jar はコミット対象とする（チームで同じ Gradle バージョンを使うため）
+
+# IDE 設定ファイル
+.idea/
+*.iml
+*.iws
+*.ipr
+.vscode/
+*.classpath
+*.project
+*.settings/
+
+# OS 固有ファイル
+.DS_Store
+Thumbs.db
+
+# ログファイル
+*.log
+logs/
+
+# 環境変数・機密ファイル
+.env
+.env.*
+*.local
+
+# wsimport 生成コード（buildディレクトリ配下なので上の build/ で除外済み）
+# build/generated-sources/ は上の build/ で除外済み
+
+# テスト結果
+test-results/
+
+# 一時ファイル
+*.tmp
+*.temp
