@@ -1,0 +1,28 @@
+# application.yml
+#
+# Process-APIテンプレートの共通アプリケーション設定。
+# プロファイル別の設定は application-{profile}.yml で上書きする。
+#
+# ■ プロファイル設定
+#   - local: ローカル開発用（./gradlew bootRun --args='--spring.profiles.active=local'）
+#   - dev: 開発環境
+#   - prod: 本番環境
+
+spring:
+  application:
+    # アプリケーション名（Spring Boot Actuatorのinfo等で使われる）
+    name: process-api-template
+
+server:
+  # 組み込みTomcatのポート番号（bootRun時に使用）
+  port: 8080
+
+# ============================================================
+# ログ設定
+# ============================================================
+logging:
+  level:
+    # Process-APIのログレベル（INFOがデフォルト）
+    jp.co.createlink.processapi: INFO
+    # Coreライブラリのログレベル
+    jp.co.createlink.core: INFO
