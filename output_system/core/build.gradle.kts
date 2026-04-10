@@ -40,6 +40,16 @@ repositories {
 }
 
 // ============================================================
+// カスタム設定: wsimport ツール用クラスパス
+// wsimport ツールは jaxws-tools に含まれており、通常の runtimeClasspath とは
+// 別のクラスパスで実行する必要がある。
+// ============================================================
+val wsimportTools: Configuration by configurations.creating {
+    // wsimport ツールの実行に必要なクラスパスを独立した設定として管理する
+    isTransitive = true
+}
+
+// ============================================================
 // 依存関係設定
 // ============================================================
 dependencies {
@@ -72,6 +82,14 @@ dependencies {
 
     // テスト実行エンジン（JUnit Platform Launcher）
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    // ----------------------------------------------------------------
+    // wsimport ツール
+    // WsImport クラスは jaxws-tools に含まれている（jaxws-rt ではない）。
+    // Java 21 の JDK には wsimport コマンドが含まれていないため、
+    // Maven セントラルから Jakarta 版の wsimport ツールを使用する。
+    // ----------------------------------------------------------------
+    wsimportTools("com.sun.xml.ws:jaxws-tools:4.0.3")
 }
 
 // ============================================================
@@ -132,8 +150,9 @@ tasks.register<JavaExec>("generateSoapSources") {
         wsimportOutputDir.mkdirs()
     }
 
-    // wsimport の実装は jaxws-rt に含まれている
-    classpath = configurations.runtimeClasspath.get()
+    // wsimport ツールのクラスパス（jaxws-tools + runtime の両方が必要）
+    // WsImport クラスは jaxws-tools に含まれている
+    classpath = wsimportTools + configurations.runtimeClasspath.get()
     mainClass.set("com.sun.tools.ws.WsImport")
 
     // wsimport 引数
