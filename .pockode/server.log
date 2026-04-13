@@ -36,3 +36,117 @@ time=2026-04-10T06:52:55.949Z level=INFO msg="AgentRoleListWatcher stopped"
 time=2026-04-10T06:52:55.949Z level=INFO msg="WorktreeWatcher stopped"
 time=2026-04-10T06:52:55.949Z level=INFO msg="manager shutdown complete" worktreesClosed=0
 time=2026-04-10T06:52:55.984Z level=INFO msg="server stopped"
+time=2026-04-10T06:53:18.646Z level=INFO msg="store watching for external changes" label=settings path=/workspace/target_repo/.pockode/settings.json
+time=2026-04-10T06:53:18.646Z level=INFO msg="store watching for external changes" label=work path=/workspace/target_repo/.pockode/works/index.json
+time=2026-04-10T06:53:18.646Z level=INFO msg="store watching for external changes" label=agent-role path=/workspace/target_repo/.pockode/agent-roles/index.json
+time=2026-04-10T06:53:18.649Z level=INFO msg="WorktreeWatcher started" mainDir=/workspace/target_repo pollInterval=3s
+time=2026-04-10T06:53:18.649Z level=INFO msg="SettingsWatcher started"
+time=2026-04-10T06:53:18.649Z level=INFO msg="WorkListWatcher started"
+time=2026-04-10T06:53:18.649Z level=INFO msg="WorkDetailWatcher started"
+time=2026-04-10T06:53:18.649Z level=INFO msg="AgentRoleListWatcher started"
+time=2026-04-10T06:53:18.961Z level=INFO msg="server starting" port=9870 workDir=/workspace/target_repo dataDir=/workspace/target_repo/.pockode devMode=false idleTimeout=72h0m0s
+time=2026-04-10T06:54:24.313Z level=INFO msg="new connection" connId=019d762b-a239-763a-a0eb-dcd661f6d6d1
+time=2026-04-10T06:54:24.323Z level=WARN msg="invalid auth token" connId=019d762b-a239-763a-a0eb-dcd661f6d6d1
+time=2026-04-10T06:54:24.324Z level=INFO msg="connection closed" connId=019d762b-a239-763a-a0eb-dcd661f6d6d1
+time=2026-04-10T06:55:11.096Z level=INFO msg="new connection" connId=019d762c-58f8-75b9-838b-4b610b9df77d
+time=2026-04-10T06:55:11.111Z level=INFO msg="FSWatcher started" workDir=/workspace/target_repo
+time=2026-04-10T06:55:11.114Z level=INFO msg="GitWatcher started" workDir=/workspace/target_repo pollInterval=3s
+time=2026-04-10T06:55:11.114Z level=INFO msg="GitDiffWatcher started" workDir=/workspace/target_repo pollInterval=3s
+time=2026-04-10T06:55:11.114Z level=INFO msg="SessionListWatcher started"
+time=2026-04-10T06:55:11.114Z level=INFO msg="ChatMessagesWatcher started"
+time=2026-04-10T06:55:11.114Z level=INFO msg="worktree created" name="" workDir=/workspace/target_repo
+time=2026-04-10T06:55:11.114Z level=INFO msg=authenticated connId=019d762c-58f8-75b9-838b-4b610b9df77d worktree="" workDir=/workspace/target_repo
+time=2026-04-10T06:55:11.123Z level=INFO msg="session created" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31
+time=2026-04-10T06:55:11.240Z level=INFO msg="subscribed to chat messages" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 subscriptionId=cm_awzi7ub4pa state=ended mode=default
+time=2026-04-10T06:55:11.244Z level=INFO msg="subscribed to chat messages" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 subscriptionId=cm_fpesfhcglq state=ended mode=default
+time=2026-04-10T06:55:11.328Z level=INFO msg="received prompt" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 length=129
+time=2026-04-10T06:55:11.329Z level=INFO msg="claude process started" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 pid=687 mode=default
+time=2026-04-10T06:55:11.329Z level=INFO msg="process created" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 resume=false agentType=claude mode=default
+time=2026-04-10T06:55:11.345Z level=INFO msg="session title updated" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 title=新しくチャットを始めます。何ができるか教えて（このメッセージ...
+time=2026-04-10T06:55:55.797Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=56724ea0-ae4c-4bb0-8a18-c624b7d575de
+time=2026-04-10T06:56:05.388Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T06:56:14.535Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=44e3a266-b3a1-4a73-8e78-bfc8490148ce
+time=2026-04-10T06:56:31.335Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T06:57:01.402Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=90a97d49-dc35-44c5-b213-f03f624c36a3
+time=2026-04-10T07:00:34.515Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:00:54.904Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=25ac0b10-70ed-4cc4-94a8-d0fd3587a89a
+time=2026-04-10T07:00:59.487Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:02:18.256Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=7a8daaa3-1800-47c3-bd1c-4cb802f4fce3
+time=2026-04-10T07:03:19.378Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:03:37.577Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=6322ee42-3932-48e1-ac6c-99f2efbe0c53
+time=2026-04-10T07:04:23.463Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:04:43.896Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=8dffd0b5-548a-4e6b-8712-5c88f2d0ba7d
+time=2026-04-10T07:05:01.999Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:05:24.059Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=eb1cbc64-708c-4fb1-ac5d-94de549455c3
+time=2026-04-10T07:05:40.062Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:06:01.841Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=698cddf1-7518-46b3-a230-ad3cbc3db2c7
+time=2026-04-10T07:07:12.423Z level=INFO msg="sent question response" connId=019d762c-58f8-75b9-838b-4b610b9df77d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:07:16.448Z level=INFO msg="connection closed" connId=019d762c-58f8-75b9-838b-4b610b9df77d
+time=2026-04-10T07:07:19.810Z level=INFO msg="new connection" connId=019d7637-7782-7518-befb-e93470ea904d
+time=2026-04-10T07:07:19.813Z level=INFO msg=authenticated connId=019d7637-7782-7518-befb-e93470ea904d worktree="" workDir=/workspace/target_repo
+time=2026-04-10T07:07:19.840Z level=INFO msg="subscribed to chat messages" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 subscriptionId=cm_rsevxcfwxi state=running mode=default
+time=2026-04-10T07:07:19.843Z level=INFO msg="subscribed to chat messages" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 subscriptionId=cm_jtllhijrka state=running mode=default
+time=2026-04-10T07:07:33.151Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=a99bcc3f-659a-41c8-bfb8-c1aef4a3beeb
+time=2026-04-10T07:07:47.097Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:08:05.336Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=a0d77f4b-f087-45b5-8927-6de678532107
+time=2026-04-10T07:08:16.775Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:08:40.059Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=5b398058-557a-486f-a7cc-6f92b9e7a025
+time=2026-04-10T07:09:18.749Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:09:45.104Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=2592e380-5367-4ce3-bb42-3c6a2eec8151
+time=2026-04-10T07:10:01.230Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:10:21.203Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=9f6961f7-e5d1-4aff-9694-59e10bee4811
+time=2026-04-10T07:10:42.860Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:10:56.758Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=aa01c79d-98b0-46e3-b366-03a3843cfd44
+time=2026-04-10T07:11:14.457Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:22:22.202Z level=INFO msg="received prompt" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 length=27
+time=2026-04-10T07:23:37.184Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=582ff97a-3106-431c-a755-1534e5ed5548
+time=2026-04-10T07:23:44.799Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:23:54.485Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=0b110fd4-63bb-47ee-96ef-8795be900c7f
+time=2026-04-10T07:24:02.613Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:36:57.824Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=9f9a6839-8db4-400e-a861-45006e2a2fa5
+time=2026-04-10T07:41:44.962Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T07:45:53.651Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=817eb983-3798-4b4c-a354-e792dce71248
+time=2026-04-10T07:50:37.551Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T08:09:55.903Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=f126b483-34d1-4314-99d9-331b8e245bf3
+time=2026-04-10T08:25:43.037Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T08:27:43.434Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=9c7bc8c2-e6b7-4ec4-a195-bfa2f3f23d82
+time=2026-04-10T08:30:54.959Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T08:44:01.807Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=aaf4e9c6-129a-43bf-81ce-74448eb6077d
+time=2026-04-10T08:46:50.535Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T08:52:12.226Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=fe684369-1078-48c0-9929-3b4fb36f67c8
+time=2026-04-10T08:54:30.633Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T09:07:30.896Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=2d91c99d-7910-497e-80a2-aceb03096cea
+time=2026-04-10T09:19:14.818Z level=INFO msg="sent question response" connId=019d7637-7782-7518-befb-e93470ea904d sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-10T22:15:24.997Z level=INFO msg="connection closed" connId=019d7637-7782-7518-befb-e93470ea904d
+time=2026-04-13T00:37:38.615Z level=INFO msg="new connection" connId=019d8445-c6b7-789c-a48c-d6e47cbdacc3
+time=2026-04-13T00:37:38.908Z level=INFO msg=authenticated connId=019d8445-c6b7-789c-a48c-d6e47cbdacc3 worktree="" workDir=/workspace/target_repo
+time=2026-04-13T00:37:41.642Z level=INFO msg="subscribed to chat messages" connId=019d8445-c6b7-789c-a48c-d6e47cbdacc3 sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 subscriptionId=cm_a4tl6zanf4 state=idle mode=default
+time=2026-04-13T00:37:41.779Z level=INFO msg="subscribed to chat messages" connId=019d8445-c6b7-789c-a48c-d6e47cbdacc3 sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 subscriptionId=cm_gquz6nhtsy state=idle mode=default
+time=2026-04-13T00:37:47.862Z level=INFO msg="new connection" connId=019d8445-ead6-7c91-832c-bead92178f59
+time=2026-04-13T00:37:47.865Z level=INFO msg=authenticated connId=019d8445-ead6-7c91-832c-bead92178f59 worktree="" workDir=/workspace/target_repo
+time=2026-04-13T00:37:52.974Z level=INFO msg="subscribed to chat messages" connId=019d8445-ead6-7c91-832c-bead92178f59 sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 subscriptionId=cm_6d2j23jjhu state=idle mode=default
+time=2026-04-13T00:37:53.037Z level=INFO msg="subscribed to chat messages" connId=019d8445-ead6-7c91-832c-bead92178f59 sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 subscriptionId=cm_osbvpj2blq state=idle mode=default
+time=2026-04-13T00:38:25.986Z level=INFO msg="connection closed" connId=019d8445-c6b7-789c-a48c-d6e47cbdacc3
+time=2026-04-13T00:41:20.624Z level=INFO msg="received prompt" connId=019d8445-ead6-7c91-832c-bead92178f59 sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 length=18
+time=2026-04-13T00:51:26.593Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=32c97815-0637-4cfe-aa28-732aee279a6d
+time=2026-04-13T01:47:26.541Z level=INFO msg="sent question response" connId=019d8445-ead6-7c91-832c-bead92178f59 sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-13T02:03:32.251Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=a99cf1af-6d74-484e-b2f3-2a0ee0e11b11
+time=2026-04-13T02:06:50.935Z level=INFO msg="sent question response" connId=019d8445-ead6-7c91-832c-bead92178f59 sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-13T02:17:31.896Z level=INFO msg="AskUserQuestion received" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 requestId=252b9416-3ab6-448a-9a6c-6602355794c2
+time=2026-04-13T02:59:19.092Z level=INFO msg="sent question response" connId=019d8445-ead6-7c91-832c-bead92178f59 sessionId=019d762c-5913-799c-9fcf-04fe6572aa31 cancelled=false
+time=2026-04-13T04:59:23.986Z level=INFO msg="connection closed" connId=019d8445-ead6-7c91-832c-bead92178f59
+time=2026-04-13T04:59:37.679Z level=INFO msg="shutting down server"
+time=2026-04-13T04:59:37.682Z level=INFO msg="SettingsWatcher stopped"
+time=2026-04-13T04:59:37.682Z level=INFO msg="WorkListWatcher stopped"
+time=2026-04-13T04:59:37.682Z level=INFO msg="WorkDetailWatcher stopped"
+time=2026-04-13T04:59:37.682Z level=INFO msg="AgentRoleListWatcher stopped"
+time=2026-04-13T04:59:37.682Z level=INFO msg="WorktreeWatcher stopped"
+time=2026-04-13T04:59:37.684Z level=INFO msg="FSWatcher stopped"
+time=2026-04-13T04:59:37.686Z level=INFO msg="GitWatcher stopped"
+time=2026-04-13T04:59:37.686Z level=INFO msg="GitDiffWatcher stopped"
+time=2026-04-13T04:59:37.686Z level=INFO msg="SessionListWatcher stopped"
+time=2026-04-13T04:59:37.687Z level=INFO msg="ChatMessagesWatcher stopped"
+time=2026-04-13T04:59:37.687Z level=INFO msg="terminating claude process" sessionId=019d762c-5913-799c-9fcf-04fe6572aa31
+time=2026-04-13T04:59:37.687Z level=INFO msg="manager shutdown complete" processesClosed=1
+time=2026-04-13T04:59:37.688Z level=INFO msg="manager shutdown complete" worktreesClosed=1
+time=2026-04-13T04:59:37.697Z level=INFO msg="server stopped"

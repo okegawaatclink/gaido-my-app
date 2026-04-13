@@ -1,0 +1,184 @@
+[
+  {
+    "title": "Epic 1: 開発者がCoreライブラリを雛形として社内システム接続クライアントを素早く実装できる",
+    "body": "## ユーザーストーリー\n\n**As a** Process-API開発者\n**I want to** 社内SOAP/RESTシステムへの接続テンプレートとなるCoreライブラリの雛形を利用したい\n**So that** 新規ドメインのProcess-API開発時にCoreライブラリの接続クライアントをVibeCodingで素早く実装できる\n\n## ビジネス価値\n\n- 社内システム接続パターンの標準化により、ドメイン毎の接続実装コストを削減\n- WSDL/OpenAPI SPECをリポジトリ内に配置することで、GitHub Copilotが接続コードを自動生成可能\n- JAX-WS (wsimport) / Spring WebClientのサンプルコードにより、接続方式の学習コストを削減\n\n## 成功指標（KPI）\n\n| 指標 | 目標値 | 計測方法 |\n|------|--------|----------|\n| Coreライブラリのビルド成功 | 100% | `./gradlew build` の成功 |\n| テストテンプレートの実行成功 | 100% | `./gradlew test` の成功 |\n| SOAP/RESTサンプルクライアントの存在 | 各1個以上 | ソースコード確認 |\n\n## INVESTチェック\n\n- [x] **I**ndependent: Process-APIとは独立してビルド・テスト可能\n- [x] **N**egotiable: 接続先のサンプル数やSPEC種別は調整可能\n- [x] **V**aluable: 社内システム接続の標準テンプレートを提供する直接的価値\n- [x] **E**stimable: ファイル数・構成が明確で見積もり可能\n- [x] **S**mall: テンプレート・雛形のみのため適切なサイズ\n- [x] **T**estable: ビルド成功・テスト実行で検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、Process-APIがCore依存のため先に必要\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、接続パターンの標準化なしでは各ドメインが独自実装になる\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、要件定義に明記\n\n## 含まれるPBI\n\n（Issue登録後にTasklistで設定）\n\n## 主要リスク\n\n| リスク | 影響度 | 発生可能性 | 対策 |\n|--------|--------|-----------|------|\n| JAX-WS wsimportがJava 21で動作しない | High | Low | Gradleタスクで動作確認、代替としてjakarta.xml.ws-api使用 |\n| Gradle composite buildの設定不備 | Med | Med | settings.gradle.ktsのincludeBuildを先行検証 |\n\n## 前提条件\n\n- Java 21 (LTS) がビルド環境に存在すること\n- Gradle (Kotlin DSL) を使用すること\n\n## 参照ドキュメント\n\n| パス | ファイル名 | 内容 |\n|------|-----------|------|\n| ai_generated/requirements/ | architecture.md | システム構成図・レイヤー構成 |\n| ai_generated/requirements/ | file_structure.md | Coreライブラリのディレクトリ構成 |\n| ai_generated/requirements/ | others.md | VibeCoding設計方針・Copilotインストラクション |",
+    "labels": [
+      "epic"
+    ]
+  },
+  {
+    "title": "Epic 2: 開発者がProcess-APIテンプレートを使って新規ドメインAPIを素早く立ち上げられる",
+    "body": "## ユーザーストーリー\n\n**As a** 新規ドメインのAPI開発者\n**I want to** Spring Boot + Core依存のProcess-APIテンプレートを雛形として利用したい\n**So that** Swagger UI・エラーハンドリング・テスト・監視が整った状態からVibeCodingでドメイン固有のAPI実装を素早く開始できる\n\n## ビジネス価値\n\n- 新規ドメインAPI立ち上げ時の定型作業を削減（Swagger UI、Actuator、エラーハンドリング等が事前構成済み）\n- テストテンプレート（JUnit5 + MockMvc）により品質基準を統一\n- WARパッケージング済みでK8Sデプロイ可能な状態を提供\n- GitHub Copilotインストラクションにより、VibeCodingの生産性を最大化\n\n## 成功指標（KPI）\n\n| 指標 | 目標値 | 計測方法 |\n|------|--------|----------|\n| Process-APIのビルド成功（WAR生成） | 100% | `./gradlew bootWar` の成功 |\n| ローカル起動＋Swagger UI表示 | 100% | `./gradlew bootRun` + ブラウザ確認 |\n| サンプルAPIのテスト成功 | 100% | `./gradlew test` の成功 |\n| Actuatorヘルスチェック応答 | 200 OK | `/actuator/health` のHTTPレスポンス確認 |\n\n## INVESTチェック\n\n- [x] **I**ndependent: Coreライブラリ（Epic 1）への依存はあるが、Epic単位としてのスコープは独立\n- [x] **N**egotiable: サンプルAPIの内容やプロファイル数は調整可能\n- [x] **V**aluable: ドメインAPI立ち上げの標準テンプレートとして直接的価値\n- [x] **E**stimable: ファイル構成・API仕様が明確で見積もり可能\n- [x] **S**mall: テンプレート・雛形のみのため適切なサイズ\n- [x] **T**estable: ビルド・起動・API呼び出し・テスト実行で検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、Process-APIテンプレートがないとドメイン開発を開始できない\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、各ドメインが独自に環境構築すると大きな手戻りになる\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、要件定義に明記\n\n## 含まれるPBI\n\n（Issue登録後にTasklistで設定）\n\n## 主要リスク\n\n| リスク | 影響度 | 発生可能性 | 対策 |\n|--------|--------|-----------|------|\n| springdoc-openapiのSpring Boot 3.4.x互換性 | Med | Low | Context7で最新バージョンを確認 |\n| Gradle composite buildでCoreを参照できない | High | Med | settings.gradle.ktsの設定を先行検証（Epic 1で対応） |\n\n## 前提条件\n\n- Epic 1（Coreライブラリ）が完了していること\n- Java 21 (LTS)、Gradle (Kotlin DSL) がビルド環境に存在すること\n\n## 参照ドキュメント\n\n| パス | ファイル名 | 内容 |\n|------|-----------|------|\n| ai_generated/requirements/ | architecture.md | レイヤー構成・Swagger UI構成 |\n| ai_generated/requirements/ | file_structure.md | Process-APIテンプレートのディレクトリ構成 |\n| ai_generated/requirements/ | api.md | サンプルエンドポイント・OpenAPI定義 |\n| ai_generated/requirements/ | devops.md | ビルド・デプロイ・プロファイル構成 |\n| ai_generated/requirements/ | others.md | VibeCoding方針・テスト戦略・CONTRIBUTING.md |",
+    "labels": [
+      "epic"
+    ]
+  },
+  {
+    "title": "PBI 1.1: SOAP接続クライアントの雛形を使って社内SOAPシステムへの接続パターンを把握できる",
+    "body": "## 親Epic\n\n（Issue登録後にTasklistで設定）\n\n## ユーザーストーリー\n\n**As a** Process-API開発者\n**I want to** Gradleプロジェクトとして構成されたCoreライブラリに、JAX-WS (wsimport)によるSOAP接続クライアントの雛形を利用したい\n**So that** 新規SOAPシステム接続時にwsimportの設定やクライアントコードの書き方を参考にできる\n\n## 価値の説明\n\nこの PBI が完了すると、開発者は:\n- Coreライブラリのプロジェクト構造（Gradle Kotlin DSL、Java 21）を理解できる\n- JAX-WS wsimportを使ったSOAPクライアント生成の設定パターンを参照できる\n- ダミーWSDLファイルの配置場所と参照方法を把握できる\n- SOAPクライアントのユニットテストの書き方を参照できる\n\n## INVESTチェック\n\n- [x] **I**ndependent: REST接続テンプレート（PBI 1.2）とは独立して実装可能\n- [x] **N**egotiable: WSDLの内容やサンプルメソッド数は調整可能\n- [x] **V**aluable: SOAPシステム接続パターンの標準化という直接的価値\n- [x] **E**stimable: ファイル構成が明確で見積もり可能\n- [x] **S**mall: Gradleプロジェクト初期化 + SOAPクライアント1クラス + テスト1クラス\n- [x] **T**estable: ビルド成功・テスト実行で検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、Coreプロジェクト基盤がないとProcess-APIが構築できない\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、SOAP接続パターンが未標準化だと各ドメインが独自実装\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、要件定義に明記\n\n## 完成の定義（DoD）\n\n- [ ] 受入条件がすべて満たされている\n- [ ] コードレビュー完了\n- [ ] ユニットテスト実行成功\n- [ ] `./gradlew build` が成功する\n\n## 受入条件\n\n| # | 条件 | 品質分類 | 回帰テスト |\n|---|------|----------|-----------|\n| 1 | Gradle Kotlin DSLプロジェクト（Java libraryプラグイン）が構成されている | 必須 | ○ |\n| 2 | Java 21がsourceCompatibility/targetCompatibilityに設定されている | 必須 | ○ |\n| 3 | JAX-WS wsimportのGradleタスクが定義されている | 必須 | ○ |\n| 4 | ダミーWSDLファイルが `specs/wsdl/` に配置されている | 必須 | × |\n| 5 | SampleSoapClient.javaが存在し、wsimport生成コードを利用するパターンが示されている | 必須 | ○ |\n| 6 | SampleSoapClientTest.javaが存在し、テストが成功する | 必須 | ○ |\n| 7 | `./gradlew build` が成功する | 必須 | ○ |\n\n## 依存関係\n\n- **前提**:\n  - なし\n- **後続**:\n  - PBI 1.2\n  - PBI 1.3\n\n> ※ `build_tasklist.py` 実行時に「PBI X.Y」がGitHub Issue番号に自動解決されます。\n\n## タスク\n\n（Issue登録後にTasklistで設定）",
+    "labels": [
+      "pbi"
+    ]
+  },
+  {
+    "title": "PBI 1.2: REST接続クライアントの雛形と共通設定・例外を使って社内RESTシステムへの接続パターンを把握できる",
+    "body": "## 親Epic\n\n（Issue登録後にTasklistで設定）\n\n## ユーザーストーリー\n\n**As a** Process-API開発者\n**I want to** Spring WebClientによるREST接続テンプレートと共通設定・例外クラスを利用したい\n**So that** 新規RESTシステム接続時の実装パターンと、Coreライブラリ全体の設定・エラーハンドリング方針を把握できる\n\n## 価値の説明\n\nこの PBI が完了すると、開発者は:\n- Spring WebClientを使ったREST接続クライアントの雛形を参照できる\n- ダミーOpenAPIファイルの配置場所を把握できる\n- CoreConfig.javaで共通設定のパターンを参照できる\n- CoreException.javaで共通例外ハンドリングのパターンを参照できる\n- application-core.ymlでCoreライブラリ固有の設定方法を把握できる\n\n## INVESTチェック\n\n- [x] **I**ndependent: SOAPテンプレート（PBI 1.1）のプロジェクト基盤に追加する形だが、スコープとしては独立\n- [x] **N**egotiable: RESTクライアントの詳細仕様は調整可能\n- [x] **V**aluable: REST接続パターンと共通基盤の標準化\n- [x] **E**stimable: ファイル構成が明確\n- [x] **S**mall: RESTクライアント1クラス + 共通クラス2つ + 設定1ファイル\n- [x] **T**estable: ビルド成功で検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、REST接続パターンがないとCoreライブラリとして不完全\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、共通設定・例外パターンは後から変更すると影響大\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、要件定義に明記\n\n## 完成の定義（DoD）\n\n- [ ] 受入条件がすべて満たされている\n- [ ] コードレビュー完了\n- [ ] `./gradlew build` が成功する\n\n## 受入条件\n\n| # | 条件 | 品質分類 | 回帰テスト |\n|---|------|----------|-----------|\n| 1 | SampleRestClient.javaが存在し、Spring WebClientの使用パターンが示されている | 必須 | ○ |\n| 2 | ダミーOpenAPIファイルが `specs/openapi/` に配置されている | 必須 | × |\n| 3 | CoreConfig.javaが存在し、共通設定パターンが示されている | 必須 | ○ |\n| 4 | CoreException.javaが存在し、共通例外クラスが定義されている | 必須 | ○ |\n| 5 | application-core.ymlが存在する | 必須 | × |\n| 6 | `./gradlew build` が成功する | 必須 | ○ |\n\n## 依存関係\n\n- **前提**:\n  - PBI 1.1\n- **後続**:\n  - PBI 1.3\n\n> ※ `build_tasklist.py` 実行時に「PBI X.Y」がGitHub Issue番号に自動解決されます。\n\n## タスク\n\n（Issue登録後にTasklistで設定）",
+    "labels": [
+      "pbi"
+    ]
+  },
+  {
+    "title": "PBI 1.3: Coreライブラリのドキュメントとコパイロット設定を参照して新規接続先を追加できる",
+    "body": "## 親Epic\n\n（Issue登録後にTasklistで設定）\n\n## ユーザーストーリー\n\n**As a** 新規接続先を追加する開発者\n**I want to** README.md、CONTRIBUTING.md、Copilotインストラクションを参照したい\n**So that** 新規SOAP/RESTシステムの接続クライアントをCoreに追加する手順を理解し、VibeCodingで効率的に実装できる\n\n## 価値の説明\n\nこの PBI が完了すると、開発者は:\n- README.mdでCoreライブラリの概要・ビルド方法を把握できる\n- CONTRIBUTING.mdで新規接続先の追加手順を把握できる\n- `.github/copilot-instructions.md`によりGitHub CopilotがCore固有のコーディング規約を理解した状態でコード生成する\n\n## INVESTチェック\n\n- [x] **I**ndependent: ドキュメントのみのPBIとして独立\n- [x] **N**egotiable: ドキュメント内容は調整可能\n- [x] **V**aluable: VibeCodingの生産性向上に直結\n- [x] **E**stimable: 3ファイルの作成で見積もり可能\n- [x] **S**mall: ドキュメント3ファイルのみ\n- [x] **T**estable: ファイル存在・内容の妥当性で検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、ドキュメントなしではVibeCodingの前提が成立しない\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、開発者ごとに異なる実装パターンになる\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、要件定義にCopilotインストラクション含むと明記\n\n## 完成の定義（DoD）\n\n- [ ] 受入条件がすべて満たされている\n- [ ] コードレビュー完了\n\n## 受入条件\n\n| # | 条件 | 品質分類 | 回帰テスト |\n|---|------|----------|-----------|\n| 1 | README.mdが存在し、プロジェクト概要・ビルド手順・ディレクトリ構成が記載されている | 必須 | × |\n| 2 | CONTRIBUTING.mdが存在し、新規接続先追加手順が記載されている | 必須 | × |\n| 3 | `.github/copilot-instructions.md`が存在し、技術スタック・命名規則・コーディング規約が記載されている | 必須 | × |\n\n## 依存関係\n\n- **前提**:\n  - PBI 1.1\n  - PBI 1.2\n- **後続**:\n  - なし\n\n> ※ `build_tasklist.py` 実行時に「PBI X.Y」がGitHub Issue番号に自動解決されます。\n\n## タスク\n\n（Issue登録後にTasklistで設定）",
+    "labels": [
+      "pbi"
+    ]
+  },
+  {
+    "title": "PBI 2.1: Process-APIのGradleプロジェクトがWAR出力でき、CoreライブラリをComposite Buildで参照できる",
+    "body": "## 親Epic\n\n（Issue登録後にTasklistで設定）\n\n## ユーザーストーリー\n\n**As a** 新規ドメインのAPI開発者\n**I want to** WAR出力対応のGradleプロジェクトがCoreライブラリをComposite Buildで参照した状態で利用したい\n**So that** K8Sデプロイ可能なWARを生成でき、Coreの接続クライアントをソースレベルで参照しながら開発できる\n\n## 価値の説明\n\nこの PBI が完了すると、開発者は:\n- `./gradlew bootWar` でWARファイルを生成できる\n- `settings.gradle.kts` の `includeBuild(\"../core\")` でCoreを直接参照できる\n- Spring Bootアプリケーションの基本クラス（Application, ServletInitializer）が存在する\n- `./gradlew bootRun` でローカル起動できる\n\n## INVESTチェック\n\n- [x] **I**ndependent: API実装やSwagger UIとは独立したプロジェクト基盤\n- [x] **N**egotiable: Gradle設定の詳細は調整可能\n- [x] **V**aluable: WAR出力 + Composite Build = K8Sデプロイ + ローカル開発の両立\n- [x] **E**stimable: Gradleファイル + アプリケーションクラス2つ\n- [x] **S**mall: プロジェクト初期化レベル\n- [x] **T**estable: bootWar成功、bootRun起動で検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、プロジェクト基盤がないとAPI実装できない\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、WAR/Composite Build設定は後付けが困難\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、要件定義に明記\n\n## 完成の定義（DoD）\n\n- [ ] 受入条件がすべて満たされている\n- [ ] コードレビュー完了\n- [ ] `./gradlew bootWar` が成功する\n\n## 受入条件\n\n| # | 条件 | 品質分類 | 回帰テスト |\n|---|------|----------|-----------|\n| 1 | build.gradle.ktsにwar plugin、Spring Boot依存、Core依存が設定されている | 必須 | ○ |\n| 2 | settings.gradle.ktsに `includeBuild(\"../core\")` が設定されている | 必須 | ○ |\n| 3 | SampleProcessApiApplication.javaが存在する | 必須 | ○ |\n| 4 | ServletInitializer.javaが存在する（WAR用） | 必須 | ○ |\n| 5 | Gradle Wrapper（gradlew, gradle/wrapper/）が配置されている | 必須 | × |\n| 6 | `./gradlew bootWar` でWARファイルが生成される | 必須 | ○ |\n| 7 | `./gradlew bootRun` でアプリケーションが起動する | 必須 | ○ |\n\n## 依存関係\n\n- **前提**:\n  - PBI 1.1（Coreプロジェクトが存在すること）\n- **後続**:\n  - PBI 2.2\n  - PBI 2.3\n\n> ※ `build_tasklist.py` 実行時に「PBI X.Y」がGitHub Issue番号に自動解決されます。\n\n## タスク\n\n（Issue登録後にTasklistで設定）",
+    "labels": [
+      "pbi"
+    ]
+  },
+  {
+    "title": "PBI 2.2: Core経由のサンプルAPIをSwagger UIで確認でき、エラー時は統一フォーマットで応答する",
+    "body": "## 親Epic\n\n（Issue登録後にTasklistで設定）\n\n## ユーザーストーリー\n\n**As a** APIコンシューマー/開発者\n**I want to** Core経由でデータ取得するサンプルAPIをSwagger UIで確認でき、エラー時に統一フォーマットのレスポンスを受け取りたい\n**So that** API仕様を対話的に確認でき、エラーハンドリングのパターンを理解した上でVibeCodingでドメイン固有のAPIを実装できる\n\n## 価値の説明\n\nこの PBI が完了すると、開発者は:\n- `/api/v1/sample` `/api/v1/sample/{id}` のサンプルエンドポイントを参照できる\n- Swagger UI (`/swagger-ui.html`) でAPI仕様を対話的に確認できる\n- @ControllerAdviceによる統一エラーレスポンス（ErrorResponse）のパターンを参照できる\n- Controller → Service → Coreのレイヤー構成パターンを把握できる\n\n## INVESTチェック\n\n- [x] **I**ndependent: Actuator（PBI 2.3）やテスト（PBI 2.4）とは独立\n- [x] **N**egotiable: サンプルエンドポイントの内容は調整可能\n- [x] **V**aluable: APIテンプレートの中核機能\n- [x] **E**stimable: Controller + Service + Config + Exception Handler\n- [x] **S**mall: サンプルAPI2エンドポイント + Swagger + エラーハンドリング\n- [x] **T**estable: API呼び出し・Swagger UI表示・エラーレスポンスで検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、テンプレートの中核機能\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、API構成パターンの標準化なしでは品質がばらつく\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、要件定義に明記\n\n## 完成の定義（DoD）\n\n- [ ] 受入条件がすべて満たされている\n- [ ] コードレビュー完了\n- [ ] `./gradlew build` が成功する\n\n## 受入条件\n\n| # | 条件 | 品質分類 | 回帰テスト |\n|---|------|----------|-----------|\n| 1 | SampleController.javaが存在し、GET `/api/v1/sample` と GET `/api/v1/sample/{id}` が定義されている | 必須 | ○ |\n| 2 | SampleService.javaが存在し、Core経由でデータを取得するパターンが示されている | 必須 | ○ |\n| 3 | SwaggerConfig.javaが存在し、springdoc-openapiが設定されている | 必須 | ○ |\n| 4 | `/swagger-ui.html` でSwagger UIが表示される | 必須 | ○ |\n| 5 | GlobalExceptionHandler.javaが@ControllerAdviceで定義されている | 必須 | ○ |\n| 6 | ErrorResponse.javaが統一エラーフォーマットを定義している | 必須 | ○ |\n| 7 | エラー発生時に統一フォーマット（timestamp, status, error, message, path）で応答する | 必須 | ○ |\n\n## 依存関係\n\n- **前提**:\n  - PBI 2.1\n- **後続**:\n  - PBI 2.4\n\n> ※ `build_tasklist.py` 実行時に「PBI X.Y」がGitHub Issue番号に自動解決されます。\n\n## タスク\n\n（Issue登録後にTasklistで設定）",
+    "labels": [
+      "pbi"
+    ]
+  },
+  {
+    "title": "PBI 2.3: Spring Actuatorでヘルスチェックでき、環境別プロファイルとログ設定が整っている",
+    "body": "## 親Epic\n\n（Issue登録後にTasklistで設定）\n\n## ユーザーストーリー\n\n**As a** K8S運用担当者/開発者\n**I want to** Spring Actuatorでヘルスチェック・メトリクスを確認でき、環境別の設定とログ出力が整っている状態を利用したい\n**So that** K8Sのliveness/readiness probeに対応でき、環境ごとの設定切り替えとログの構造化が容易にできる\n\n## 価値の説明\n\nこの PBI が完了すると:\n- `/actuator/health` でK8S probeに対応できる\n- application-{local,dev,prod}.ymlで環境別設定が分離されている\n- logback-spring.xmlでログ出力フォーマットが設定されている\n\n## INVESTチェック\n\n- [x] **I**ndependent: API実装（PBI 2.2）とは独立した設定系PBI\n- [x] **N**egotiable: 公開するActuatorエンドポイントの範囲は調整可能\n- [x] **V**aluable: K8S運用に必要な監視・設定基盤\n- [x] **E**stimable: 設定ファイル5つの作成\n- [x] **S**mall: 設定ファイルのみ\n- [x] **T**estable: Actuatorエンドポイント応答で検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、K8Sデプロイに必須\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、設定基盤の後付けは影響範囲が大きい\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、非機能要件に明記\n\n## 完成の定義（DoD）\n\n- [ ] 受入条件がすべて満たされている\n- [ ] コードレビュー完了\n\n## 受入条件\n\n| # | 条件 | 品質分類 | 回帰テスト |\n|---|------|----------|-----------|\n| 1 | Spring Actuator依存がbuild.gradle.ktsに追加されている | 必須 | ○ |\n| 2 | `/actuator/health` が200 OKを返す | 必須 | ○ |\n| 3 | `/actuator/info` が応答する | 推奨 | △ |\n| 4 | `/actuator/metrics` が応答する | 推奨 | △ |\n| 5 | application.yml（共通設定）が存在する | 必須 | × |\n| 6 | application-local.yml、application-dev.yml、application-prod.ymlが存在する | 必須 | × |\n| 7 | logback-spring.xmlが存在し、ログフォーマットが設定されている | 必須 | × |\n\n## 依存関係\n\n- **前提**:\n  - PBI 2.1\n- **後続**:\n  - PBI 2.4\n\n> ※ `build_tasklist.py` 実行時に「PBI X.Y」がGitHub Issue番号に自動解決されます。\n\n## タスク\n\n（Issue登録後にTasklistで設定）",
+    "labels": [
+      "pbi"
+    ]
+  },
+  {
+    "title": "PBI 2.4: テストテンプレートとドキュメントを参照して新規ドメインAPIのテスト・構築手順を把握できる",
+    "body": "## 親Epic\n\n（Issue登録後にTasklistで設定）\n\n## ユーザーストーリー\n\n**As a** 新規ドメインのAPI開発者\n**I want to** JUnit5 + MockMvcのテストテンプレートとプロジェクトドキュメント（README/CONTRIBUTING/Copilotインストラクション）を参照したい\n**So that** テストの書き方パターンと新規ドメイン追加手順を把握し、VibeCodingで品質の高いAPIを効率的に構築できる\n\n## 価値の説明\n\nこの PBI が完了すると、開発者は:\n- SampleControllerTest.javaでMockMvcを使ったControllerテストのパターンを参照できる\n- Process-APIのOpenAPI定義ファイル（`specs/openapi/process-api.yaml`）を参照できる\n- README.mdでプロジェクト概要・ビルド・起動手順を把握できる\n- CONTRIBUTING.mdで新規ドメイン追加手順を把握できる\n- `.github/copilot-instructions.md`でVibeCoding時のコード生成品質が向上する\n\n## INVESTチェック\n\n- [x] **I**ndependent: テスト+ドキュメントとして独立したスコープ\n- [x] **N**egotiable: テストパターン数やドキュメント詳細度は調整可能\n- [x] **V**aluable: テスト品質基準の統一 + VibeCoding生産性向上\n- [x] **E**stimable: テスト1クラス + ドキュメント3ファイル + SPEC 1ファイル\n- [x] **S**mall: 適切なサイズ\n- [x] **T**estable: テスト実行成功・ファイル存在で検証可能\n\n## YAGNIチェック\n\n- [x] 今この瞬間、これがないと先に進めないか？ → Yes、テストテンプレート・ドキュメントなしではVibeCoding品質が担保できない\n- [x] 作らないことで10倍以上の手戻りが発生するか？ → Yes、テストパターンが未統一だと品質がばらつく\n- [x] 推測ではなく実際の要求に基づいているか？ → Yes、要件定義に明記\n\n## 完成の定義（DoD）\n\n- [ ] 受入条件がすべて満たされている\n- [ ] コードレビュー完了\n- [ ] テスト実行成功\n\n## 受入条件\n\n| # | 条件 | 品質分類 | 回帰テスト |\n|---|------|----------|-----------|\n| 1 | SampleControllerTest.javaが存在し、MockMvcによるテストパターンが示されている | 必須 | ○ |\n| 2 | テストが `./gradlew test` で成功する | 必須 | ○ |\n| 3 | `specs/openapi/process-api.yaml` にOpenAPI定義が配置されている | 必須 | × |\n| 4 | README.mdが存在し、プロジェクト概要・ビルド・起動・Swagger UIアクセス方法が記載されている | 必須 | × |\n| 5 | CONTRIBUTING.mdが存在し、新規ドメイン追加手順が記載されている | 必須 | × |\n| 6 | `.github/copilot-instructions.md`が存在し、技術スタック・レイヤー構成・テストパターンが記載されている | 必須 | × |\n\n## 依存関係\n\n- **前提**:\n  - PBI 2.2\n  - PBI 2.3\n- **後続**:\n  - なし\n\n> ※ `build_tasklist.py` 実行時に「PBI X.Y」がGitHub Issue番号に自動解決されます。\n\n## タスク\n\n（Issue登録後にTasklistで設定）",
+    "labels": [
+      "pbi"
+    ]
+  },
+  {
+    "title": "Task 1.1.1: Coreライブラリの Gradle Kotlin DSL プロジェクトを初期化する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `output_system/core/` ディレクトリを作成する\n- `build.gradle.kts` を作成する（java-library plugin、Java 21設定）\n- `settings.gradle.kts` を作成する（rootProject.name = \"core\"）\n- Gradle Wrapper（gradlew, gradlew.bat, gradle/wrapper/）を配置する\n- パッケージ `jp.co.createlink.core` のディレクトリ構成を作成する（soap/, rest/, config/, exception/）\n- `src/test/java/jp/co/createlink/core/` のディレクトリ構成を作成する\n\n## 完了条件\n\n- [ ] `output_system/core/build.gradle.kts` が存在し、java-library plugin が設定されている\n- [ ] sourceCompatibility/targetCompatibility が Java 21 に設定されている\n- [ ] `./gradlew build` が成功する（ソースなしでもビルドが通ること）\n- [ ] Gradle Wrapperファイルが配置されている\n\n## 技術的な注意点\n\n- Java 21 LTS を使用する\n- Gradle Kotlin DSL を使用する（Groovyではない）\n- `java-library` plugin を使用する（`java` pluginではない。API/implementation分離のため）\n- build.gradle.kts にはJAX-WS wsimport設定の枠を用意しておく（次Taskで実装）\n\n## 依存関係\n\n- **前提（これが必要）**: なし\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/file_structure.md: Coreライブラリのディレクトリ構成\n- ai_generated/requirements/devops.md: ビルドコマンド",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 1.1.2: JAX-WS wsimport設定とダミーWSDLファイルを配置する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `specs/wsdl/sample-service.wsdl` にダミーWSDLファイルを配置する\n- `build.gradle.kts` にJAX-WS wsimportのGradleタスクを追加する\n- JAX-WS関連の依存関係（jakarta.xml.ws-api等）を追加する\n- wsimportタスクがWSDLからJavaコードを生成する設定を記述する\n\n## 完了条件\n\n- [ ] `specs/wsdl/sample-service.wsdl` が存在し、有効なWSDL構造である\n- [ ] `build.gradle.kts` にwsimport関連のGradleタスクが定義されている\n- [ ] JAX-WS依存関係が追加されている\n- [ ] `./gradlew build` が成功する\n\n## 技術的な注意点\n\n- Java 21ではJAX-WSがJDKから削除されているため、Jakarta EE版（jakarta.xml.ws-api）を使用する\n- wsimportタスクはGradle標準ではないため、プラグインまたはカスタムタスクで対応する\n- ダミーWSDLは最小限のサービス定義（1オペレーション）で構成する\n- Context7でJAX-WS / wsimportの最新情報を確認すること\n\n## 依存関係\n\n- **前提（これが必要）**: task-1-1-1\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/file_structure.md: specs/wsdl/の配置先\n- ai_generated/requirements/others.md: VibeCoding設計方針",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 1.1.3: SampleSoapClient と SampleSoapClientTest を実装する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `src/main/java/jp/co/createlink/core/soap/SampleSoapClient.java` を作成する\n  - wsimport生成コードを利用するパターンを示す\n  - @Component アノテーションで DI 対象にする\n  - SOAPエンドポイントURLを設定ファイルから注入するパターンを示す\n- `src/test/java/jp/co/createlink/core/soap/SampleSoapClientTest.java` を作成する\n  - JUnit5でのテストパターンを示す\n  - SOAPクライアントのモックテスト\n\n## 完了条件\n\n- [ ] SampleSoapClient.java が存在し、wsimport生成コードの利用パターンが示されている\n- [ ] SampleSoapClientTest.java が存在し、テストが成功する\n- [ ] `./gradlew test` が成功する\n\n## 技術的な注意点\n\n- テンプレートとしての可読性を重視する（VibeCoding時にCopilotが参照するため）\n- コメントで「ここを接続先に合わせて変更する」等のガイドを記述する\n- SOAPエンドポイントURLはハードコードせず、設定ファイルから注入するパターンにする\n\n## 依存関係\n\n- **前提（これが必要）**: task-1-1-2\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/file_structure.md: ファイル配置先\n- ai_generated/requirements/others.md: テスト戦略（Core単体テスト = JUnit5 + WireMock）",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 1.2.1: SampleRestClient と ダミーOpenAPIファイルを作成する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `src/main/java/jp/co/createlink/core/rest/SampleRestClient.java` を作成する\n  - Spring WebClient を使用した REST 接続パターンを示す\n  - @Component アノテーションで DI 対象にする\n  - ベースURLを設定ファイルから注入するパターンを示す\n  - GET/POST のサンプルメソッドを実装する\n- `specs/openapi/sample-api.yaml` にダミーOpenAPIファイルを配置する\n- Spring WebClient の依存関係を build.gradle.kts に追加する（spring-boot-starter-webflux）\n\n## 完了条件\n\n- [ ] SampleRestClient.java が存在し、WebClient の使用パターンが示されている\n- [ ] `specs/openapi/sample-api.yaml` が存在し、有効なOpenAPI 3.0構造である\n- [ ] spring-boot-starter-webflux の依存が追加されている\n- [ ] `./gradlew build` が成功する\n\n## 技術的な注意点\n\n- Spring WebClient はリアクティブ対応だが、テンプレートでは同期的な `.block()` パターンも示す\n- ベースURLは `@Value` で設定ファイルから注入するパターンにする\n- コメントで「ここをOpenAPI定義に合わせて変更する」等のガイドを記述する\n- Context7でSpring WebClientの最新情報を確認すること\n\n## 依存関係\n\n- **前提（これが必要）**: task-1-1-1（Gradleプロジェクト基盤が必要）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/file_structure.md: specs/openapi/の配置先\n- ai_generated/requirements/README.md: Spring WebClientの選定理由",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 1.2.2: CoreConfig, CoreException, application-core.yml を作成する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `src/main/java/jp/co/createlink/core/config/CoreConfig.java` を作成する\n  - @Configuration アノテーション\n  - WebClient.Builder の Bean 定義（SSL設定、タイムアウト設定のテンプレート）\n  - 共通設定値の読み込みパターン\n- `src/main/java/jp/co/createlink/core/exception/CoreException.java` を作成する\n  - RuntimeException を継承\n  - エラーコード、メッセージ、原因例外を保持\n  - SOAP/REST接続エラーのラップパターン\n- `src/main/resources/application-core.yml` を作成する\n  - Core固有の設定項目（接続先URL、タイムアウト値等）のテンプレート\n\n## 完了条件\n\n- [ ] CoreConfig.java が存在し、@Configuration + Bean 定義パターンが示されている\n- [ ] CoreException.java が存在し、エラーコード・メッセージを保持する構造になっている\n- [ ] application-core.yml が存在する\n- [ ] `./gradlew build` が成功する\n\n## 技術的な注意点\n\n- CoreConfig の WebClient.Builder は Process-API 側でも利用するため、Bean として公開する\n- CoreException は Process-API の GlobalExceptionHandler で catch するため、適切なフィールドを持たせる\n- application-core.yml はプロファイル名 \"core\" で自動読み込みされるため命名に注意\n\n## 依存関係\n\n- **前提（これが必要）**: task-1-2-1（REST依存関係が追加済みであること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/file_structure.md: ファイル配置先\n- ai_generated/requirements/architecture.md: レイヤー構成",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 1.3.1: Core の README.md と CONTRIBUTING.md を作成する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `output_system/core/README.md` を作成する\n  - プロジェクト概要（Coreライブラリの役割）\n  - 技術スタック（Java 21, Spring Boot 3.4.x, Gradle Kotlin DSL）\n  - ディレクトリ構成\n  - ビルド方法（`./gradlew build`）\n  - テスト実行方法（`./gradlew test`）\n  - specs/ ディレクトリの説明\n- `output_system/core/CONTRIBUTING.md` を作成する\n  - 新規SOAP接続先の追加手順（WSDLファイル配置 → wsimport設定 → クライアント実装）\n  - 新規REST接続先の追加手順（OpenAPIファイル配置 → クライアント実装）\n  - パッケージ命名規則（jp.co.createlink.core.{接続先名}/）\n  - テストの書き方ガイド\n\n## 完了条件\n\n- [ ] README.md が存在し、上記項目が記載されている\n- [ ] CONTRIBUTING.md が存在し、新規接続先追加手順が記載されている\n\n## 技術的な注意点\n\n- VibeCoding前提のため、GitHub Copilotが参照しやすい構成にする\n- 手順は番号付きリストで明確に記述する\n\n## 依存関係\n\n- **前提（これが必要）**: task-1-2-2（共通設定が完成していること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/others.md: 新規ドメイン追加手順\n- ai_generated/requirements/file_structure.md: ディレクトリ構成",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 1.3.2: Core の .github/copilot-instructions.md を作成する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `output_system/core/.github/copilot-instructions.md` を作成する\n  - プロジェクトの技術スタック情報（Java 21, Spring Boot 3.4.x, Gradle Kotlin DSL）\n  - パッケージ命名規則（jp.co.createlink.core.*）\n  - SOAP接続クライアントの実装パターン（JAX-WS wsimport利用）\n  - REST接続クライアントの実装パターン（Spring WebClient利用）\n  - `specs/` ディレクトリのWSDL/OpenAPIファイルの参照方法\n  - エラーハンドリングパターン（CoreException使用）\n  - テストの書き方（JUnit5 + モック）\n\n## 完了条件\n\n- [ ] `.github/copilot-instructions.md` が存在する\n- [ ] 上記の全項目が記載されている\n\n## 技術的な注意点\n\n- GitHub Copilotが理解しやすい平易な英語で記述する\n- コード例を含めて具体的に記述する\n- `specs/` ディレクトリへのパス参照を含める\n\n## 依存関係\n\n- **前提（これが必要）**: task-1-3-1（README/CONTRIBUTINGの方針が決まっていること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/others.md: Copilotインストラクション方針",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.1.1: Process-API の Gradle Kotlin DSL プロジェクトを初期化し WAR 出力と Composite Build を設定する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `output_system/process-api-template/` ディレクトリを作成する\n- `build.gradle.kts` を作成する\n  - `war` plugin と `org.springframework.boot` plugin を設定\n  - Java 21 設定\n  - Spring Boot Starter Web 依存\n  - Core ライブラリへの `implementation(project(\":core\"))` 依存\n- `settings.gradle.kts` を作成する\n  - `rootProject.name = \"process-api-template\"`\n  - `includeBuild(\"../core\")` でComposite Build設定\n- Gradle Wrapper（gradlew, gradlew.bat, gradle/wrapper/）を配置する\n- パッケージ `jp.co.createlink.processapi` のディレクトリ構成を作成する\n\n## 完了条件\n\n- [ ] `build.gradle.kts` に war plugin、Spring Boot plugin、Core依存が設定されている\n- [ ] `settings.gradle.kts` に `includeBuild(\"../core\")` が設定されている\n- [ ] Java 21 が設定されている\n- [ ] Gradle Wrapper が配置されている\n- [ ] `./gradlew build` が成功する\n\n## 技術的な注意点\n\n- Spring Boot 3.4.x を使用する（Context7で最新バージョンを確認すること）\n- war plugin と spring-boot plugin の組み合わせで `bootWar` タスクが使えることを確認する\n- Composite Build の `includeBuild` パスは相対パス `../core` を使用する\n- サプライチェーン対策: Gradle にはクールダウン機能なし。ロックファイル運用を検討する\n\n## 依存関係\n\n- **前提（これが必要）**: task-1-1-1（Coreプロジェクト基盤が存在すること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/file_structure.md: Process-APIのディレクトリ構成\n- ai_generated/requirements/devops.md: ビルドコマンド",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.1.2: SampleProcessApiApplication と ServletInitializer を作成する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `src/main/java/jp/co/createlink/processapi/SampleProcessApiApplication.java` を作成する\n  - @SpringBootApplication アノテーション\n  - main メソッド\n- `src/main/java/jp/co/createlink/processapi/ServletInitializer.java` を作成する\n  - SpringBootServletInitializer を継承\n  - configure メソッドをオーバーライド\n  - WAR デプロイ時の初期化処理\n\n## 完了条件\n\n- [ ] SampleProcessApiApplication.java が存在し、@SpringBootApplication が設定されている\n- [ ] ServletInitializer.java が存在し、SpringBootServletInitializer を継承している\n- [ ] `./gradlew bootWar` で WAR ファイルが生成される\n- [ ] `./gradlew bootRun` でアプリケーションが起動する（ポート8080）\n\n## 技術的な注意点\n\n- ServletInitializer はWAR デプロイ（外部Tomcat）時に必要。組み込みTomcat（bootRun）では不要だが、両対応のため含める\n- Spring Boot 3.4.x の場合、`SpringBootServletInitializer` は `org.springframework.boot.web.servlet.support` パッケージにある\n- Context7でSpring Boot 3.4.xのWAR設定を確認すること\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-1-1\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/file_structure.md: ファイル配置先\n- ai_generated/requirements/devops.md: ビルド・起動コマンド",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.2.1: SampleController と SampleService を作成し Core 経由のデータ取得パターンを実装する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `src/main/java/jp/co/createlink/processapi/controller/SampleController.java` を作成する\n  - @RestController, @RequestMapping(\"/api/v1/sample\")\n  - GET `/api/v1/sample` → サンプルデータ一覧取得\n  - GET `/api/v1/sample/{id}` → 特定サンプルデータ取得\n  - springdoc-openapi アノテーション（@Operation, @ApiResponse 等）\n- `src/main/java/jp/co/createlink/processapi/service/SampleService.java` を作成する\n  - @Service アノテーション\n  - Core ライブラリの SampleSoapClient / SampleRestClient を DI で注入\n  - Core 経由でデータを取得するパターンを示す\n\n## 完了条件\n\n- [ ] SampleController.java が存在し、2つの GET エンドポイントが定義されている\n- [ ] SampleService.java が存在し、Core 経由のデータ取得パターンが示されている\n- [ ] Controller → Service → Core の DI チェーンが構成されている\n- [ ] `./gradlew build` が成功する\n\n## 技術的な注意点\n\n- テンプレートとしての可読性を重視する（各レイヤーの責務が明確であること）\n- コメントで「ここをドメイン固有のロジックに変更する」等のガイドを記述する\n- Core のクライアントが未実装の場合はスタブデータを返すパターンも示す\n- springdoc-openapi のアノテーションを適切に付与してSwagger UIでの表示を充実させる\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-1-2（アプリケーション基盤が起動可能であること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/api.md: サンプルエンドポイント定義・OpenAPI定義\n- ai_generated/requirements/architecture.md: レイヤー構成",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.2.2: springdoc-openapi の SwaggerConfig を作成し Swagger UI を有効化する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- springdoc-openapi 依存を `build.gradle.kts` に追加する\n- `src/main/java/jp/co/createlink/processapi/config/SwaggerConfig.java` を作成する\n  - @Configuration アノテーション\n  - OpenAPI Bean 定義（タイトル、バージョン、説明）\n  - サーバー情報の設定\n- application.yml に springdoc 関連の設定を追加する\n\n## 完了条件\n\n- [ ] springdoc-openapi の依存が build.gradle.kts に追加されている\n- [ ] SwaggerConfig.java が存在し、OpenAPI 設定が定義されている\n- [ ] `/swagger-ui.html` にアクセスすると Swagger UI が表示される\n- [ ] `/v3/api-docs` で OpenAPI JSON が取得できる\n\n## 技術的な注意点\n\n- Spring Boot 3.4.x には `springdoc-openapi-starter-webmvc-ui` を使用する\n- Context7 で springdoc-openapi の最新バージョンと Spring Boot 3.4.x との互換性を確認すること\n- サプライチェーン対策: 依存追加時にパッケージの公開日を確認すること\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-2-1（Controller が存在すること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/api.md: Swagger UI パス定義\n- ai_generated/requirements/README.md: springdoc-openapi の選定理由",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.2.3: GlobalExceptionHandler と ErrorResponse を作成し統一エラーハンドリングを実装する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `src/main/java/jp/co/createlink/processapi/exception/ErrorResponse.java` を作成する\n  - timestamp, status, error, message, path フィールド\n  - Jackson シリアライゼーション対応\n- `src/main/java/jp/co/createlink/processapi/exception/GlobalExceptionHandler.java` を作成する\n  - @ControllerAdvice, @RestControllerAdvice アノテーション\n  - CoreException のハンドリング（500 Internal Server Error）\n  - IllegalArgumentException のハンドリング（400 Bad Request）\n  - NoSuchElementException のハンドリング（404 Not Found）\n  - 汎用 Exception のハンドリング（500）\n\n## 完了条件\n\n- [ ] ErrorResponse.java が存在し、timestamp/status/error/message/path を持つ\n- [ ] GlobalExceptionHandler.java が @ControllerAdvice で定義されている\n- [ ] CoreException、IllegalArgumentException、NoSuchElementException がハンドリングされる\n- [ ] エラー発生時に統一フォーマットの JSON レスポンスが返される\n\n## 技術的な注意点\n\n- ErrorResponse は api.md の「エラーレスポンス形式」に準拠する\n- @ExceptionHandler の引数型と戻り値型を正しく設定する\n- HttpServletRequest から path を取得するパターンを示す\n- ログ出力を含める（SLF4J Logger）\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-2-1（Controller/Service が存在すること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/api.md: エラーレスポンス形式\n- ai_generated/requirements/README.md: Security分析（入力バリデーション）",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.3.1: Spring Actuator を設定しヘルスチェック・メトリクスエンドポイントを有効化する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `spring-boot-starter-actuator` 依存を `build.gradle.kts` に追加する\n- application.yml に Actuator エンドポイントの公開設定を追加する\n  - `management.endpoints.web.exposure.include: health,info,metrics`\n  - `management.endpoint.health.probes.enabled: true`（K8S liveness/readiness対応）\n\n## 完了条件\n\n- [ ] spring-boot-starter-actuator の依存が追加されている\n- [ ] `/actuator/health` が 200 OK を返す\n- [ ] `/actuator/info` が応答する\n- [ ] `/actuator/metrics` が応答する\n- [ ] K8S probes（liveness/readiness）が有効化されている\n\n## 技術的な注意点\n\n- Actuator エンドポイントはデフォルトで `/actuator/health` のみ公開。追加公開が必要\n- 本番環境では management.server.port で分離することを推奨（コメントで記載）\n- Context7 で Spring Boot Actuator 3.4.x の設定を確認すること\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-1-2（アプリケーションが起動可能であること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/api.md: 管理エンドポイント一覧\n- ai_generated/requirements/devops.md: K8Sヘルスチェック設定",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.3.2: 環境別プロファイル設定ファイルと logback-spring.xml を作成する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `src/main/resources/application.yml` を作成する（共通設定）\n  - サーバーポート: 8080\n  - springdoc, actuator の共通設定\n- `src/main/resources/application-local.yml` を作成する\n  - ローカル開発用設定（デバッグログレベル等）\n- `src/main/resources/application-dev.yml` を作成する\n  - 開発環境用設定\n- `src/main/resources/application-prod.yml` を作成する\n  - 本番環境用設定（ログレベル制限等）\n- `src/main/resources/logback-spring.xml` を作成する\n  - プロファイル別のログ出力設定\n  - JSON 形式ログ出力パターン（本番用）\n  - コンソール出力パターン（ローカル用）\n\n## 完了条件\n\n- [ ] application.yml が存在し、共通設定が記載されている\n- [ ] application-local.yml, application-dev.yml, application-prod.yml が存在する\n- [ ] logback-spring.xml が存在し、プロファイル別のログ設定がある\n- [ ] `--spring.profiles.active=local` で起動できる\n\n## 技術的な注意点\n\n- プロファイルの優先順位: application.yml < application-{profile}.yml\n- logback-spring.xml は Spring Boot の `<springProfile>` タグでプロファイル別設定が可能\n- 機密情報（パスワード等）はプレースホルダー `${ENV_VAR}` で環境変数注入パターンを示す\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-3-1（Actuator設定を含むため）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/devops.md: プロファイル構成\n- ai_generated/requirements/README.md: SLF4J + Logback の選定",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.4.1: SampleControllerTest を作成し MockMvc によるテストパターンを示す",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `src/test/java/jp/co/createlink/processapi/controller/SampleControllerTest.java` を作成する\n  - @WebMvcTest(SampleController.class) を使用\n  - MockMvc による GET `/api/v1/sample` のテスト\n  - MockMvc による GET `/api/v1/sample/{id}` のテスト\n  - @MockBean で SampleService をモック化\n  - 正常系テスト（200 OK、レスポンスボディ検証）\n  - 異常系テスト（404 Not Found、500 Internal Server Error）\n  - テスト用依存関係を build.gradle.kts に追加（spring-boot-starter-test）\n\n## 完了条件\n\n- [ ] SampleControllerTest.java が存在する\n- [ ] MockMvc による正常系テスト（200 OK）が成功する\n- [ ] MockMvc による異常系テスト（404、500）が成功する\n- [ ] `./gradlew test` が成功する\n\n## 技術的な注意点\n\n- @WebMvcTest はController層のみをロードする軽量テスト（Service/Repositoryはモック）\n- MockMvc の `.andExpect(jsonPath(\"$.field\").value(...))` パターンを示す\n- @MockBean で Core 依存を排除するパターンを示す\n- VibeCodingのテスト参考になるよう、パターンバリエーションを豊富に含める\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-2-3（Controller/Service/ExceptionHandler が全て揃っていること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/others.md: テスト戦略\n- ai_generated/requirements/README.md: JUnit5 + MockMvc の選定",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.4.2: Process-API の OpenAPI 定義ファイルを specs/ に配置する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `specs/openapi/process-api.yaml` を作成する\n  - OpenAPI 3.0.3 形式\n  - api.md の OpenAPI 定義に準拠\n  - paths: /api/v1/sample, /api/v1/sample/{id}\n  - components/schemas: SampleResponse, ErrorResponse\n  - サーバー情報（localhost:8080）\n\n## 完了条件\n\n- [ ] `specs/openapi/process-api.yaml` が存在する\n- [ ] OpenAPI 3.0 の有効な構造である\n- [ ] api.md の定義と一致している\n\n## 技術的な注意点\n\n- このファイルは Copilot が参照するSPECファイルとして配置する（springdoc自動生成とは別）\n- VibeCoding時に新規エンドポイント追加の参考となるよう、十分な定義を含める\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-2-1（API定義が確定していること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/api.md: OpenAPI定義（サンプル）",
+    "labels": [
+      "task"
+    ]
+  },
+  {
+    "title": "Task 2.4.3: Process-API の README.md, CONTRIBUTING.md, .github/copilot-instructions.md を作成する",
+    "body": "## 親PBI\n\n（Issue登録後にTasklistで設定）\n\n## 作業内容\n\n- `output_system/process-api-template/README.md` を作成する\n  - プロジェクト概要（Process-APIテンプレートの役割）\n  - 技術スタック\n  - ディレクトリ構成\n  - ビルド方法（`./gradlew bootWar`）\n  - ローカル起動方法（`./gradlew bootRun --args='--spring.profiles.active=local'`）\n  - Swagger UIアクセス方法（http://localhost:8080/swagger-ui.html）\n  - Actuatorエンドポイント一覧\n  - テスト実行方法\n- `output_system/process-api-template/CONTRIBUTING.md` を作成する\n  - 新規ドメイン追加手順（6ステップ: コピー→リネーム→Core参照→SPEC配置→Copilot設定→VibeCoding）\n  - パッケージ命名規則\n  - レイヤー構成（Controller → Service → Core）の説明\n- `output_system/process-api-template/.github/copilot-instructions.md` を作成する\n  - 技術スタック情報\n  - パッケージ命名規則（jp.co.createlink.processapi.*）\n  - レイヤー分離ルール（@RestController, @Service）\n  - Core ライブラリの使い方（DI パターン）\n  - `specs/` ディレクトリの参照方法\n  - エラーハンドリングパターン（@ControllerAdvice）\n  - テストの書き方（MockMvc パターン）\n\n## 完了条件\n\n- [ ] README.md が存在し、上記項目が記載されている\n- [ ] CONTRIBUTING.md が存在し、新規ドメイン追加手順が記載されている\n- [ ] `.github/copilot-instructions.md` が存在し、上記項目が記載されている\n\n## 技術的な注意点\n\n- VibeCoding前提のため、Copilotインストラクションは特に重要\n- CONTRIBUTING.mdの手順はothers.mdの「新規ドメイン追加手順」に準拠する\n- README.mdにはdevops.mdの情報を反映する\n\n## 依存関係\n\n- **前提（これが必要）**: task-2-4-1（テストパターンが確定していること）\n- **ブロッカー**: なし\n\n## 参考資料\n\n- ai_generated/requirements/others.md: VibeCoding設計方針・Copilotインストラクション方針・新規ドメイン追加手順\n- ai_generated/requirements/devops.md: ビルド・起動コマンド・プロファイル構成\n- ai_generated/requirements/api.md: エンドポイント一覧",
+    "labels": [
+      "task"
+    ]
+  }
+]
