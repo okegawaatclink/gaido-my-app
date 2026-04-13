@@ -54,8 +54,13 @@ output_system/
         │   │   ├── exception/GlobalExceptionHandler.java # @RestControllerAdvice（CoreException/400/404/500）
         │   │   └── service/SampleService.java         # Core経由データ取得パターン（スタブ付き）
         │   └── resources/
-        │       └── application.yml                    # 基本設定（ポート8080 + springdoc設定）
+        │       ├── application.yml                    # 共通設定（ポート8080 + springdoc + Actuator設定）
+        │       ├── application-local.yml              # ローカル開発用（DEBUG ログレベル）
+        │       ├── application-dev.yml                # 開発環境用（INFO ログレベル）
+        │       ├── application-prod.yml               # 本番環境用（WARN ログレベル、ヘルス詳細非表示）
+        │       └── logback-spring.xml                 # プロファイル別ログフォーマット（local:カラー/dev:テキスト/prod:JSON）
         └── test/java/jp/co/createlink/processapi/
+            ├── actuator/ActuatorEndpointTest.java     # Actuator統合テスト（@SpringBootTest + MockMvc）
             ├── controller/SampleControllerTest.java   # MockMvcテスト
             ├── exception/GlobalExceptionHandlerTest.java # エラーハンドリングテスト
             └── service/SampleServiceTest.java         # サービスユニットテスト
@@ -109,6 +114,7 @@ cd output_system/process-api-template
 - **SampleSoapClient のビルドは generateSoapSources が前提**: wsimport 生成コードを import しているため、`./gradlew build` 単体では失敗する。`./gradlew generateSoapSources build` で実行すること
 - **Composite Buildの依存参照**: `project(":core")` はComposite Buildでは使えない。`"jp.co.createlink:core"` のような `group:artifact` 形式で指定する必要がある
 - **Composite BuildでCoreをビルドする際もgenerateSoapSourcesが必要**: process-api-templateのbootWarがComposite Build経由でCoreをビルドするとき、SampleSoapClientがwsimport生成コードを参照するためエラーになる。事前にcore側でgenerateSoapSourcesを実行しておく必要がある（Dockerfile.buildの手順参照）
+- **@SpringBootTest でCore BeanのNoSuchBeanDefinitionException**: @SpringBootApplication のデフォルトスキャンは `jp.co.createlink.processapi` のみ。Core の `jp.co.createlink.core` パッケージのBean（SampleRestClient等）はスキャン対象外のため、@SpringBootTest で完全コンテキスト起動すると Bean が見つからずエラーになる。@MockitoBean でモック化することで回避できる
 
 ## 実装済み機能
 
@@ -117,3 +123,4 @@ cd output_system/process-api-template
 - PBI #5: Coreライブラリのドキュメント整備（README.md, CONTRIBUTING.md, .github/copilot-instructions.md）
 - PBI #6: Process-APIテンプレートのGradleプロジェクト基盤（bootWar/bootRun動作確認済み）
 - PBI #7: サンプルAPIエンドポイント・Swagger UI・統一エラーハンドリング（springdoc-openapi 2.8.6 + @ControllerAdvice + ErrorResponse）
+- PBI #8: Spring Actuatorヘルスチェック・プロファイル別設定（/actuator/health,liveness,readiness,info,metrics + application-{local,dev,prod}.yml + logback-spring.xml）
