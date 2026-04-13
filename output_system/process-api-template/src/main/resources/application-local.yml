@@ -1,0 +1,60 @@
+# application-local.yml
+#
+# ローカル開発環境用プロファイル設定。
+# application.yml（共通設定）を上書きする。
+#
+# ■ 起動方法
+#   ./gradlew bootRun --args='--spring.profiles.active=local'
+#
+# ■ このプロファイルの特徴
+#   - デバッグログレベルを有効化
+#   - Actuator の詳細情報を全て表示
+#   - 機密情報はプレースホルダー（${ENV_VAR}）で示す（環境変数で注入）
+
+spring:
+  # ローカル開発では H2 インメモリDB やモックを使用することを想定
+  # DB接続を追加する場合は以下のパターンで設定する:
+  # datasource:
+  #   url: jdbc:h2:mem:testdb
+  #   username: sa
+  #   password: ""
+  #   driver-class-name: org.h2.Driver
+
+# ============================================================
+# ログ設定（ローカル開発用: デバッグ情報を詳細に出力）
+# ============================================================
+logging:
+  level:
+    # Process-APIを DEBUG レベルで出力（開発中のデバッグ用）
+    jp.co.createlink.processapi: DEBUG
+    # Coreライブラリも DEBUG レベルで出力
+    jp.co.createlink.core: DEBUG
+    # Spring Web の HTTP リクエスト/レスポンスをデバッグ出力（必要に応じて有効化）
+    # org.springframework.web: DEBUG
+    # Spring Security のデバッグ（セキュリティ追加時に有効化）
+    # org.springframework.security: DEBUG
+
+# ============================================================
+# Actuator 設定（ローカル開発用）
+# ============================================================
+management:
+  endpoint:
+    health:
+      # ローカルでは全ての詳細情報を表示する
+      show-details: always
+  info:
+    # /actuator/info に環境変数情報も表示する（ローカルのみ）
+    env:
+      enabled: true
+    # ビルド情報も表示する（build-info.properties が存在する場合）
+    build:
+      enabled: true
+
+# ============================================================
+# アプリ情報（/actuator/info に表示される）
+# ============================================================
+info:
+  app:
+    name: process-api-template
+    description: "Process-API テンプレート（ローカル環境）"
+    environment: local

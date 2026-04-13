@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  logback-spring.xml
+
+  Spring Boot のログ出力設定。
+  logback-spring.xml を使うことで <springProfile> タグが使え、
+  Spring プロファイルに応じた設定の切り替えが可能になる。
+  （logback.xml では Spring プロファイルが使えないため logback-spring.xml を使用）
+
+  ■ プロファイル別の出力形式
+    - local: コンソール出力（色付きの読みやすいテキスト形式）
+    - dev:   コンソール出力（テキスト形式）
+    - prod:  コンソール出力（JSON 形式: ログ集約基盤での解析に適した構造化ログ）
+
+  ■ ログ集約基盤との連携（本番環境）
+    JSON 形式での出力は Fluentd/Logstash などのログ収集エージェントが
+    パースしやすい形式。Kibana/Grafana Loki 等での可視化に適している。
+
+  ■ Spring Boot のデフォルトログ設定との関係
+    このファイルが存在すると Spring Boot の自動設定（DefaultLogbackConfiguration）は
+    無効になる。必要なアペンダーはすべてこのファイルで定義すること。
+-->
+
+<!-- scan="true": ファイルの変更を検知して自動リロード（本番では無効化推奨） -->
+<!-- scanPeriod="30 seconds": 30秒ごとに変更をスキャン -->
+<configuration scan="true" scanPeriod="30 seconds">
+
+  <!-- ============================================================ -->
+  <!-- Spring Boot のデフォルト設定をインポート                         -->
+  <!-- Spring Boot が提供するデフォルトのログ設定（色付きコンソール等）を利用 -->
+  <!-- ============================================================ -->
+  <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+  <!-- ============================================================ -->
+  <!-- プロパティ定義                                                   -->
+  <!-- ============================================================ -->
+
+  <!-- アプリケーション名: MDC（Mapped Diagnostic Context）としてログに付与 -->
+  <springProperty scope="context" name="APP_NAME" source="spring.application.name" defaultValue="process-api"/>
+
+  <!-- 現在のアクティブプロファイル -->
+  <springProperty scope="context" name="ACTIVE_PROFILE" source="spring.profiles.active" defaultValue="default"/>
+
+  <!-- ============================================================ -->
+  <!-- ローカル開発用アペンダー（local プロファイル）                     -->
+  <!-- カラー付き・人間が読みやすいテキスト形式で出力する                    -->
+  <!-- ============================================================ -->
+  <springProfile name="local">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <!-- Spring Boot のデフォルトカラーフォーマットを使用 -->
+        <!-- %clr: カラー出力  %d: 日時  %p: ログレベル  %t: スレッド  %logger: ロガー名  %m: メッセージ -->
+        <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx</pattern>
+        <charset>UTF-8</charset>
+      </encoder>
+    </appender>
+
+    <!-- ローカル環境の root ログレベルは DEBUG -->
+    <root level="DEBUG">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Process-API: DEBUG レベル -->
+    <logger name="jp.co.createlink.processapi" level="DEBUG" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Core: DEBUG レベル -->
+    <logger name="jp.co.createlink.core" level="DEBUG" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Spring Framework: INFO レベル（デバッグ時は DEBUG に変更可） -->
+    <logger name="org.springframework" level="INFO" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+  </springProfile>
+
+  <!-- ============================================================ -->
+  <!-- 開発環境用アペンダー（dev プロファイル）                           -->
+  <!-- テキスト形式で出力（カラーなし）                                   -->
+  <!-- ============================================================ -->
+  <springProfile name="dev">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <!-- タイムスタンプ、ログレベル、スレッド、ロガー名、メッセージを出力 -->
+        <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${PID:- } --- [%15.15t] %-40.40logger{39} : %m%n%wEx</pattern>
+        <charset>UTF-8</charset>
+      </encoder>
+    </appender>
+
+    <!-- 開発環境の root ログレベルは INFO -->
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Process-API: INFO レベル -->
+    <logger name="jp.co.createlink.processapi" level="INFO" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Core: INFO レベル -->
+    <logger name="jp.co.createlink.core" level="INFO" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Spring Framework: WARN レベル -->
+    <logger name="org.springframework" level="WARN" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+  </springProfile>
+
+  <!-- ============================================================ -->
+  <!-- 本番環境用アペンダー（prod プロファイル）                          -->
+  <!-- JSON 形式で出力（ログ集約基盤での解析用）                          -->
+  <!--                                                              -->
+  <!-- ■ JSON ログフォーマットについて                                  -->
+  <!--   logstash-logback-encoder（net.logstash.logback）を使うと       -->
+  <!--   より高機能な JSON 出力が可能だが、依存関係追加が必要になる。        -->
+  <!--   ここでは依存関係なしで動作するシンプルなJSONパターンを使用する。    -->
+  <!--   将来的に Fluentd/EFK 等を導入する場合は logstash-logback-encoder  -->
+  <!--   への移行を検討すること。                                        -->
+  <!-- ============================================================ -->
+  <springProfile name="prod">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <!--
+          JSON 形式のログパターン
+          各フィールドの説明:
+            timestamp: ISO8601 形式の日時
+            level:     ログレベル（INFO/WARN/ERROR等）
+            app:       アプリケーション名（spring.application.name）
+            pid:       プロセスID
+            thread:    スレッド名
+            logger:    ロガー名（クラス名）
+            message:   ログメッセージ
+
+          注意: メッセージ内のダブルクォートはエスケープされない。
+          本番運用でメッセージに特殊文字が含まれる場合は
+          logstash-logback-encoder の使用を推奨する。
+        -->
+        <pattern>{"timestamp":"%d{yyyy-MM-dd'T'HH:mm:ss.SSSXXX}","level":"%p","app":"${APP_NAME}","pid":"${PID:-}","thread":"%t","logger":"%logger{39}","message":"%m"}%n</pattern>
+        <charset>UTF-8</charset>
+      </encoder>
+    </appender>
+
+    <!-- 本番環境の root ログレベルは WARN -->
+    <root level="WARN">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+
+    <!-- Process-API: WARN レベル（エラーと警告のみ） -->
+    <logger name="jp.co.createlink.processapi" level="WARN" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Core: WARN レベル -->
+    <logger name="jp.co.createlink.core" level="WARN" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- Spring Framework: WARN レベル -->
+    <logger name="org.springframework" level="WARN" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+  </springProfile>
+
+  <!-- ============================================================ -->
+  <!-- デフォルト設定（プロファイル未指定時のフォールバック）               -->
+  <!-- ローカル開発と同様のコンソール出力を行う                            -->
+  <!-- ============================================================ -->
+  <springProfile name="default">
+    <appender name="CONSOLE_DEFAULT" class="ch.qos.logback.core.ConsoleAppender">
+      <encoder>
+        <pattern>%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx</pattern>
+        <charset>UTF-8</charset>
+      </encoder>
+    </appender>
+
+    <root level="INFO">
+      <appender-ref ref="CONSOLE_DEFAULT"/>
+    </root>
+
+    <logger name="jp.co.createlink.processapi" level="INFO" additivity="false">
+      <appender-ref ref="CONSOLE_DEFAULT"/>
+    </logger>
+
+    <logger name="jp.co.createlink.core" level="INFO" additivity="false">
+      <appender-ref ref="CONSOLE_DEFAULT"/>
+    </logger>
+  </springProfile>
+
+</configuration>

@@ -1,0 +1,57 @@
+# application-dev.yml
+#
+# 開発環境（dev）用プロファイル設定。
+# application.yml（共通設定）を上書きする。
+#
+# ■ 起動方法
+#   K8Sデプロイ時に環境変数で指定:
+#   SPRING_PROFILES_ACTIVE=dev
+#
+# ■ このプロファイルの特徴
+#   - ログレベルは INFO（ローカルより制限、本番より緩め）
+#   - Actuator の詳細情報は表示
+#   - 外部サービス接続先は開発環境向けエンドポイント
+#   - 機密情報はプレースホルダー（${ENV_VAR}）で示す（K8S Secretで注入）
+
+# ============================================================
+# ログ設定（開発環境用）
+# ============================================================
+logging:
+  level:
+    # 開発環境では INFO レベル（デバッグ情報は出力しない）
+    jp.co.createlink.processapi: INFO
+    jp.co.createlink.core: INFO
+
+# ============================================================
+# Actuator 設定（開発環境用）
+# ============================================================
+management:
+  endpoint:
+    health:
+      # 開発環境ではヘルス詳細を表示する（トラブルシューティング用）
+      show-details: always
+  info:
+    env:
+      enabled: true
+    build:
+      enabled: true
+
+# ============================================================
+# アプリ情報（/actuator/info に表示される）
+# ============================================================
+info:
+  app:
+    name: process-api-template
+    description: "Process-API テンプレート（開発環境）"
+    environment: dev
+
+# ============================================================
+# 外部サービス接続設定（開発環境向け）
+# 機密情報は環境変数（K8S Secret）で注入する
+# ============================================================
+# 例: データベース接続
+# spring:
+#   datasource:
+#     url: ${DB_URL:jdbc:postgresql://dev-db-host:5432/processdb}
+#     username: ${DB_USERNAME}
+#     password: ${DB_PASSWORD}

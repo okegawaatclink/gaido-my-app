@@ -1,0 +1,67 @@
+# application-prod.yml
+#
+# 本番環境（prod）用プロファイル設定。
+# application.yml（共通設定）を上書きする。
+#
+# ■ 起動方法
+#   K8Sデプロイ時に環境変数で指定:
+#   SPRING_PROFILES_ACTIVE=prod
+#
+# ■ このプロファイルの特徴
+#   - ログレベルは WARN（エラーと警告のみ出力）
+#   - Actuator の詳細情報は非表示（セキュリティのため）
+#   - Actuatorは management.server.port の別ポートに分離推奨
+#   - 外部サービス接続先は本番向けエンドポイント
+#   - 機密情報はプレースホルダー（${ENV_VAR}）で示す（K8S Secretで注入）
+
+# ============================================================
+# ログ設定（本番環境用: 警告・エラーのみ出力）
+# ============================================================
+logging:
+  level:
+    # 本番環境では WARN レベル（過剰なログ出力を抑制）
+    jp.co.createlink.processapi: WARN
+    jp.co.createlink.core: WARN
+    # Spring Framework 全体も WARN レベルに制限
+    org.springframework: WARN
+
+# ============================================================
+# Actuator 設定（本番環境用: セキュリティ強化）
+# ============================================================
+management:
+  # ■ 本番環境のセキュリティ推奨事項
+  #   management.server.port を独立したポートに設定することで、
+  #   K8S NetworkPolicy で内部ネットワークのみからのアクセスに制限できる。
+  #   Ingressには8080のみ公開し、8081は内部通信専用にする。
+  #
+  # server:
+  #   port: 8081  # Actuator専用ポート（Ingressに公開しない）
+  endpoint:
+    health:
+      # 本番環境ではヘルス詳細を非表示（WHEN_AUTHORIZED: 認証済みユーザーのみ表示）
+      # 外部に詳細情報を漏洩させないためNEVERまたはWHEN_AUTHORIZEDを使用する
+      show-details: never
+  info:
+    # 本番環境では環境情報は非表示
+    env:
+      enabled: false
+
+# ============================================================
+# アプリ情報（/actuator/info に表示される）
+# ============================================================
+info:
+  app:
+    name: process-api-template
+    description: "Process-API テンプレート"
+    environment: prod
+
+# ============================================================
+# 外部サービス接続設定（本番環境向け）
+# 機密情報は環境変数（K8S Secret）で注入する
+# ============================================================
+# 例: データベース接続
+# spring:
+#   datasource:
+#     url: ${DB_URL}
+#     username: ${DB_USERNAME}
+#     password: ${DB_PASSWORD}
