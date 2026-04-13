@@ -1,0 +1,357 @@
+openapi: 3.0.3
+info:
+  title: Process-API Template
+  description: |
+    Process-API テンプレートのAPI定義。
+
+    Spring Boot 3.4.x + Java 21で実装された、
+    マルチプロジェクト構成のAPIテンプレートです。
+
+    Coreライブラリ経由で社内SOAP/RESTシステムからデータを取得し、
+    外部コンシューマーにREST APIで提供します。
+  version: 1.0.0
+  contact:
+    name: API Support
+    url: https://github.com/okegawaatclink/gaido-api-template
+servers:
+  - url: http://localhost:8080
+    description: ローカル開発環境
+  - url: http://api-dev.example.com
+    description: 開発環境
+  - url: http://api-prod.example.com
+    description: 本番環境
+
+tags:
+  - name: Sample
+    description: サンプルAPI（Coreライブラリ経由でデータ取得）
+  - name: Health
+    description: ヘルスチェック・管理エンドポイント（Spring Actuator）
+
+paths:
+  /api/v1/sample:
+    get:
+      summary: サンプルデータ一覧取得
+      description: |
+        Core経由で社内システムからサンプルデータを取得する。
+
+        **実装例**: Core内のSampleSoapClient/SampleRestClientを呼び出し、
+        社内システムからデータを集約してレスポンスする。
+      operationId: getSampleList
+      tags:
+        - Sample
+      parameters:
+        - name: limit
+          in: query
+          description: 取得件数上限（デフォルト: 100）
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 1000
+            default: 100
+        - name: offset
+          in: query
+          description: オフセット（デフォルト: 0）
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        '200':
+          description: 正常レスポンス
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SampleResponse'
+              examples:
+                success:
+                  value:
+                    - id: sample-001
+                      name: サンプルデータ1
+                      data:
+                        status: ACTIVE
+                        timestamp: 2026-04-13T10:30:00Z
+                    - id: sample-002
+                      name: サンプルデータ2
+                      data:
+                        status: INACTIVE
+                        timestamp: 2026-04-13T11:00:00Z
+        '400':
+          description: リクエストパラメータの不正
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                internalError:
+                  value:
+                    timestamp: 2026-04-13T10:30:00Z
+                    status: 500
+                    error: Internal Server Error
+                    message: 社内システムへの接続に失敗しました
+                    path: /api/v1/sample
+
+  /api/v1/sample/{id}:
+    get:
+      summary: サンプルデータ取得（ID指定）
+      description: |
+        Core経由で特定IDのサンプルデータを取得する。
+
+        **実装例**: Core内のSampleSoapClient.getById(id)を呼び出し、
+        社内システムから単件データを取得。
+      operationId: getSampleById
+      tags:
+        - Sample
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: サンプルデータID
+          schema:
+            type: string
+            pattern: ^[a-zA-Z0-9-]+$
+            minLength: 1
+            maxLength: 50
+          example: sample-001
+      responses:
+        '200':
+          description: 正常レスポンス
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SampleResponse'
+              example:
+                id: sample-001
+                name: サンプルデータ1
+                data:
+                  status: ACTIVE
+                  timestamp: 2026-04-13T10:30:00Z
+        '400':
+          description: リクエストパラメータの不正
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: データが見つからない
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                timestamp: 2026-04-13T10:30:00Z
+                status: 404
+                error: Not Found
+                message: サンプルデータ（ID: sample-999）が見つかりません
+                path: /api/v1/sample/sample-999
+        '500':
+          description: サーバーエラー
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /actuator/health:
+    get:
+      summary: ヘルスチェック
+      description: |
+        Spring Actuatorが提供するヘルスチェックエンドポイント。
+        K8SのLiveness Probeおよび Readiness Probeで使用。
+      operationId: getHealth
+      tags:
+        - Health
+      responses:
+        '200':
+          description: ヘルシーな状態
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: UP
+                components:
+                  db:
+                    status: UP
+                  discoveryClient:
+                    status: UP
+        '503':
+          description: 不健全な状態
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /actuator/info:
+    get:
+      summary: アプリケーション情報
+      description: アプリケーション情報を返す（application.ymlで設定）
+      operationId: getInfo
+      tags:
+        - Health
+      responses:
+        '200':
+          description: アプリケーション情報
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  app:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                      description:
+                        type: string
+                      version:
+                        type: string
+                example:
+                  app:
+                    name: process-api-template
+                    description: Process-API テンプレート
+                    version: 1.0.0
+
+  /actuator/metrics:
+    get:
+      summary: メトリクス情報一覧
+      description: 利用可能なメトリクス情報の一覧を返す
+      operationId: getMetrics
+      tags:
+        - Health
+      responses:
+        '200':
+          description: メトリクス一覧
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  names:
+                    type: array
+                    items:
+                      type: string
+                example:
+                  names:
+                    - jvm.memory.used
+                    - jvm.threads.live
+                    - http.server.requests
+
+  /swagger-ui.html:
+    get:
+      summary: Swagger UI
+      description: このAPIドキュメントを提供するSwagger UIエンドポイント
+      operationId: getSwaggerUI
+      tags:
+        - Documentation
+      responses:
+        '200':
+          description: Swagger UIページ（HTML）
+
+components:
+  schemas:
+    SampleResponse:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+          description: サンプルデータID
+          example: sample-001
+        name:
+          type: string
+          description: サンプルデータ名
+          example: サンプルデータ1
+        data:
+          type: object
+          description: Core経由で取得した社内システムデータ
+          additionalProperties: true
+          example:
+            status: ACTIVE
+            timestamp: 2026-04-13T10:30:00Z
+            details:
+              department: 営業部
+              manager: 田中太郎
+
+    ErrorResponse:
+      type: object
+      required:
+        - timestamp
+        - status
+        - error
+        - message
+        - path
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          description: エラー発生時刻
+          example: 2026-04-13T10:30:00.000+09:00
+        status:
+          type: integer
+          description: HTTPステータスコード
+          example: 500
+        error:
+          type: string
+          description: エラーの種類
+          example: Internal Server Error
+        message:
+          type: string
+          description: エラーメッセージ
+          example: 社内システムへの接続に失敗しました
+        path:
+          type: string
+          description: リクエストパス
+          example: /api/v1/sample
+
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - UP
+            - DOWN
+            - OUT_OF_SERVICE
+            - UNKNOWN
+          description: ヘルス状態
+          example: UP
+        components:
+          type: object
+          description: コンポーネント毎のヘルス状態
+          additionalProperties:
+            type: object
+            properties:
+              status:
+                type: string
+                enum:
+                  - UP
+                  - DOWN
+                  - OUT_OF_SERVICE
+                  - UNKNOWN
+
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-Key
+      in: header
+      description: |
+        （将来拡張用）
+        APIキー認証。
+        内部ネットワーク利用のため、現在は無効。
+        本番運用時に有効化してください。
+
+security:
+  - {}
+
+externalDocs:
+  description: GitHub リポジトリ
+  url: https://github.com/okegawaatclink/gaido-api-template
