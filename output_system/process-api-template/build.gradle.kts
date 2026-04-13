@@ -102,6 +102,22 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
 
     // ----------------------------------------------------------------
+    // Spring Boot Actuator
+    // ヘルスチェック・メトリクス・情報エンドポイントを提供する。
+    // K8SのlivenessProbe/readinessProbeに対応するために必要。
+    //
+    // 提供するエンドポイント（application.ymlで公開設定が必要）:
+    //   - /actuator/health           : アプリ全体のヘルス状態
+    //   - /actuator/health/liveness  : K8S Liveness probe（アプリが生きているか）
+    //   - /actuator/health/readiness : K8S Readiness probe（トラフィック受付可能か）
+    //   - /actuator/info             : アプリ情報（バージョン等）
+    //   - /actuator/metrics          : Micrometer メトリクス
+    //
+    // バージョン管理: Spring Boot BOMで自動管理されるため、バージョン指定不要
+    // ----------------------------------------------------------------
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+
+    // ----------------------------------------------------------------
     // テスト依存関係
     // spring-boot-starter-test にはJUnit 5、Mockito、MockMvcが含まれる
     // ----------------------------------------------------------------

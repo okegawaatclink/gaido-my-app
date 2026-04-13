@@ -5,17 +5,72 @@
 #
 # ■ プロファイル設定
 #   - local: ローカル開発用（./gradlew bootRun --args='--spring.profiles.active=local'）
-#   - dev: 開発環境
-#   - prod: 本番環境
+#   - dev:   開発環境
+#   - prod:  本番環境
+#
+# ■ 設定優先順位
+#   application.yml（共通）< application-{profile}.yml（プロファイル別）
+#   プロファイル別設定で上書きすることで環境差分を吸収する
 
 spring:
   application:
-    # アプリケーション名（Spring Boot Actuatorのinfo等で使われる）
+    # アプリケーション名（Spring Boot ActuatorのinfoエンドポイントやログのMDCで使われる）
     name: process-api-template
 
 server:
   # 組み込みTomcatのポート番号（bootRun時に使用）
+  # K8SのService/IngressはこのポートにルーティングするDeploymentを作成する
   port: 8080
+
+# ============================================================
+# Spring Boot Actuator 設定
+# ============================================================
+management:
+  endpoints:
+    web:
+      exposure:
+        # 公開するActuatorエンドポイントを明示的に指定する。
+        # デフォルトは health のみ公開。
+        # - health:   K8S probe / 死活監視に必須
+        # - info:     アプリバージョン・ビルド情報
+        # - metrics:  Micrometer メトリクス（Prometheus等との連携に使用）
+        #
+        # ■ セキュリティ注意
+        #   本番環境では management.server.port で別ポートに分離し、
+        #   K8S NetworkPolicyで内部ネットワークのみからのアクセスに制限することを推奨する。
+        #   例: management.server.port=8081 として、Ingressには8080のみを公開する
+        include: "health,info,metrics"
+  endpoint:
+    health:
+      # K8S の liveness/readiness probe に対応するためのカスタムヘルスグループを有効化する。
+      # これを true にすることで以下のエンドポイントが有効になる:
+      #   - /actuator/health/liveness  （K8S livenessProbe 用）
+      #   - /actuator/health/readiness （K8S readinessProbe 用）
+      #
+      # K8S Deployment の probe 設定例（参考）:
+      #   livenessProbe:
+      #     httpGet:
+      #       path: /actuator/health/liveness
+      #       port: 8080
+      #     initialDelaySeconds: 30
+      #     periodSeconds: 10
+      #   readinessProbe:
+      #     httpGet:
+      #       path: /actuator/health/readiness
+      #       port: 8080
+      #     initialDelaySeconds: 10
+      #     periodSeconds: 5
+      probes:
+        enabled: true
+      # ヘルス詳細情報の表示設定
+      # ALWAYS: 常に詳細表示
+      # WHEN_AUTHORIZED: 認証済みユーザーのみ詳細表示（本番推奨）
+      # NEVER: 詳細非表示
+      show-details: always
+  info:
+    # /actuator/info に Spring の環境情報を表示する
+    env:
+      enabled: true
 
 # ============================================================
 # springdoc-openapi（Swagger UI）設定
@@ -38,11 +93,11 @@ springdoc:
     path: /v3/api-docs
 
 # ============================================================
-# ログ設定
+# ログ設定（共通デフォルト）
 # ============================================================
 logging:
   level:
-    # Process-APIのログレベル（INFOがデフォルト）
+    # Process-APIのログレベル（INFOがデフォルト。プロファイル別で上書き可）
     jp.co.createlink.processapi: INFO
     # Coreライブラリのログレベル
     jp.co.createlink.core: INFO
