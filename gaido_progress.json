@@ -1,16 +1,16 @@
 {
-  "phase": "実装フェーズ",
+  "phase": "成果まとめフェーズ",
   "status": "starting",
   "current_task": null,
   "progress": null,
   "total": null,
   "message": null,
-  "timestamp": "2026-04-10T07:50:57.741948+00:00",
+  "timestamp": "2026-04-13T06:20:40.862130+00:00",
   "flow_type": "new_development",
-  "ui_phase": "develop",
-  "ui_phase_number": 5,
+  "ui_phase": "finalize",
+  "ui_phase_number": 8,
   "ui_phase_total": 9,
-  "ui_phase_label": "実装",
+  "ui_phase_label": "まとめ",
   "ui_phases": [
     {
       "ui_phase": "welcome",
