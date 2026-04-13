@@ -150,3 +150,12 @@ time=2026-04-13T04:59:37.687Z level=INFO msg="terminating claude process" sessio
 time=2026-04-13T04:59:37.687Z level=INFO msg="manager shutdown complete" processesClosed=1
 time=2026-04-13T04:59:37.688Z level=INFO msg="manager shutdown complete" worktreesClosed=1
 time=2026-04-13T04:59:37.697Z level=INFO msg="server stopped"
+time=2026-04-13T05:41:50.486Z level=INFO msg="store watching for external changes" label=settings path=/workspace/target_repo/.pockode/settings.json
+time=2026-04-13T05:41:50.503Z level=INFO msg="store watching for external changes" label=work path=/workspace/target_repo/.pockode/works/index.json
+time=2026-04-13T05:41:50.504Z level=INFO msg="store watching for external changes" label=agent-role path=/workspace/target_repo/.pockode/agent-roles/index.json
+time=2026-04-13T05:41:50.529Z level=INFO msg="WorktreeWatcher started" mainDir=/workspace/target_repo pollInterval=3s
+time=2026-04-13T05:41:50.530Z level=INFO msg="SettingsWatcher started"
+time=2026-04-13T05:41:50.531Z level=INFO msg="WorkListWatcher started"
+time=2026-04-13T05:41:50.531Z level=INFO msg="WorkDetailWatcher started"
+time=2026-04-13T05:41:50.531Z level=INFO msg="AgentRoleListWatcher started"
+time=2026-04-13T05:41:50.863Z level=INFO msg="server starting" port=9870 workDir=/workspace/target_repo dataDir=/workspace/target_repo/.pockode devMode=false idleTimeout=72h0m0s
