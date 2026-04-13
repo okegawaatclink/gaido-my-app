@@ -12,30 +12,53 @@
 
 ```
 output_system/
-└── core/
-    ├── build.gradle.kts               # java-library, Java 21, JAX-WS+REST依存, wsimportタスク
-    ├── settings.gradle.kts            # rootProject.name = "core"
+├── core/
+│   ├── build.gradle.kts               # java-library, Java 21, JAX-WS+REST依存, wsimportタスク
+│   ├── settings.gradle.kts            # rootProject.name = "core"
+│   ├── gradlew, gradlew.bat           # Gradle 8.12.1 Wrapper
+│   ├── gradle/wrapper/
+│   ├── specs/
+│   │   ├── wsdl/sample-service.wsdl   # ダミーWSDL（getSampleDataオペレーション）
+│   │   └── openapi/sample-api.yaml    # ダミーOpenAPI 3.0定義（GET/POST /samples）
+│   └── src/
+│       ├── main/
+│       │   ├── java/jp/co/createlink/core/
+│       │   │   ├── config/CoreConfig.java         # WebClient.Builder Bean（タイムアウト・SSL）
+│       │   │   ├── exception/
+│       │   │   │   ├── CoreException.java         # 共通例外（errorCode付き）
+│       │   │   │   └── SoapClientException.java   # SOAP専用例外（既存・後方互換）
+│       │   │   ├── rest/SampleRestClient.java     # REST接続クライアント雛形
+│       │   │   └── soap/SampleSoapClient.java     # SOAP接続クライアント雛形
+│       │   └── resources/
+│       │       ├── application-core.yml           # SOAP/REST設定・SSL設定テンプレート
+│       │       └── wsdl/sample-service.wsdl       # クラスパスリソース用WSDL
+│       └── test/java/jp/co/createlink/core/
+│           ├── exception/CoreExceptionTest.java   # 6件ユニットテスト
+│           ├── rest/SampleRestClientTest.java     # 8件ユニットテスト（WebClientモック）
+│           └── soap/SampleSoapClientTest.java     # 6件ユニットテスト
+└── process-api-template/
+    ├── build.gradle.kts               # war plugin, Spring Boot 3.4.4, Core依存（Composite Build）
+    ├── settings.gradle.kts            # rootProject.name="process-api-template", includeBuild("../core")
     ├── gradlew, gradlew.bat           # Gradle 8.12.1 Wrapper
     ├── gradle/wrapper/
-    ├── specs/
-    │   ├── wsdl/sample-service.wsdl   # ダミーWSDL（getSampleDataオペレーション）
-    │   └── openapi/sample-api.yaml    # ダミーOpenAPI 3.0定義（GET/POST /samples）
+    ├── Dockerfile.build               # WSL環境でのビルド確認用（.gitignore対象ではない）
     └── src/
         ├── main/
-        │   ├── java/jp/co/createlink/core/
-        │   │   ├── config/CoreConfig.java         # WebClient.Builder Bean（タイムアウト・SSL）
-        │   │   ├── exception/
-        │   │   │   ├── CoreException.java         # 共通例外（errorCode付き）
-        │   │   │   └── SoapClientException.java   # SOAP専用例外（既存・後方互換）
-        │   │   ├── rest/SampleRestClient.java     # REST接続クライアント雛形
-        │   │   └── soap/SampleSoapClient.java     # SOAP接続クライアント雛形
+        │   ├── java/jp/co/createlink/processapi/
+        │   │   ├── SampleProcessApiApplication.java  # @SpringBootApplicationエントリーポイント
+        │   │   ├── ServletInitializer.java            # WAR用（SpringBootServletInitializer継承）
+        │   │   ├── config/SwaggerConfig.java          # springdoc-openapi OpenAPI Bean定義
+        │   │   ├── controller/SampleController.java   # GET /api/v1/sample, /api/v1/sample/{id}
+        │   │   ├── dto/SampleResponse.java            # レスポンスDTO
+        │   │   ├── exception/ErrorResponse.java       # 統一エラーレスポンスDTO
+        │   │   ├── exception/GlobalExceptionHandler.java # @RestControllerAdvice（CoreException/400/404/500）
+        │   │   └── service/SampleService.java         # Core経由データ取得パターン（スタブ付き）
         │   └── resources/
-        │       ├── application-core.yml           # SOAP/REST設定・SSL設定テンプレート
-        │       └── wsdl/sample-service.wsdl       # クラスパスリソース用WSDL
-        └── test/java/jp/co/createlink/core/
-            ├── exception/CoreExceptionTest.java   # 6件ユニットテスト
-            ├── rest/SampleRestClientTest.java     # 8件ユニットテスト（WebClientモック）
-            └── soap/SampleSoapClientTest.java     # 6件ユニットテスト
+        │       └── application.yml                    # 基本設定（ポート8080 + springdoc設定）
+        └── test/java/jp/co/createlink/processapi/
+            ├── controller/SampleControllerTest.java   # MockMvcテスト
+            ├── exception/GlobalExceptionHandlerTest.java # エラーハンドリングテスト
+            └── service/SampleServiceTest.java         # サービスユニットテスト
 ```
 
 ## ビルド・起動方法
@@ -47,9 +70,24 @@ cd output_system/core
 docker build -f Dockerfile.build .
 # ※ Dockerfile.build は .gitignore 対象（ビルド確認専用）
 
-# ビルドコマンド（通常）
+# Coreビルドコマンド（通常）
 # 事前に generateSoapSources が必要（SOAP生成コードが必要なため）
 ./gradlew generateSoapSources build
+
+# Process-API テンプレートビルド（WSL環境・ホストにJavaなし）
+# Composite BuildでCoreも含めるため、ビルドコンテキストはoutput_system/
+cd output_system
+docker build -f process-api-template/Dockerfile.build .
+
+# Process-API WARビルド（通常・ホストにJavaあり）
+# 事前にCore側でgenerateSoapSourcesが必要
+cd output_system/core && ./gradlew generateSoapSources
+cd output_system/process-api-template && ./gradlew bootWar
+
+# Process-API ローカル起動
+cd output_system/process-api-template
+./gradlew bootRun --args='--spring.profiles.active=local'
+# → http://localhost:8080 でアクセス可能
 ```
 
 ## 設計判断
@@ -69,8 +107,13 @@ docker build -f Dockerfile.build .
 - **jaxws-tools の mainClass**: `com.sun.tools.ws.WsImport`（jaxws-rt では ClassNotFoundException になる）
 - **CoreConfig の SSLException**: `SslContextBuilder.build()` は `javax.net.ssl.SSLException`（チェック例外）をスローするため、ラムダ内で catch して `IllegalStateException` に変換する必要がある
 - **SampleSoapClient のビルドは generateSoapSources が前提**: wsimport 生成コードを import しているため、`./gradlew build` 単体では失敗する。`./gradlew generateSoapSources build` で実行すること
+- **Composite Buildの依存参照**: `project(":core")` はComposite Buildでは使えない。`"jp.co.createlink:core"` のような `group:artifact` 形式で指定する必要がある
+- **Composite BuildでCoreをビルドする際もgenerateSoapSourcesが必要**: process-api-templateのbootWarがComposite Build経由でCoreをビルドするとき、SampleSoapClientがwsimport生成コードを参照するためエラーになる。事前にcore側でgenerateSoapSourcesを実行しておく必要がある（Dockerfile.buildの手順参照）
 
 ## 実装済み機能
 
 - PBI #3: SOAP接続クライアント雛形（JAX-WS wsimport + SampleSoapClient + テスト）
 - PBI #4: REST接続クライアント雛形と共通設定・例外（WebClient + CoreConfig + CoreException + テスト）
+- PBI #5: Coreライブラリのドキュメント整備（README.md, CONTRIBUTING.md, .github/copilot-instructions.md）
+- PBI #6: Process-APIテンプレートのGradleプロジェクト基盤（bootWar/bootRun動作確認済み）
+- PBI #7: サンプルAPIエンドポイント・Swagger UI・統一エラーハンドリング（springdoc-openapi 2.8.6 + @ControllerAdvice + ErrorResponse）

@@ -18,6 +18,26 @@ server:
   port: 8080
 
 # ============================================================
+# springdoc-openapi（Swagger UI）設定
+# ============================================================
+springdoc:
+  # Swagger UI のアクセスパス設定
+  # デフォルトの /swagger-ui.html でアクセス可能にするための設定
+  swagger-ui:
+    # /swagger-ui.html → /swagger-ui/index.html へリダイレクトする
+    path: /swagger-ui.html
+    # Swagger UI 起動時に自動的に try-it-out（試用）機能を有効化する（任意）
+    try-it-out-enabled: true
+    # タグ名でソートして表示する（任意。false にするとコントローラー順になる）
+    tags-sorter: alpha
+    # オペレーションID でソートして表示する（任意）
+    operations-sorter: alpha
+  # OpenAPI エンドポイントのパス設定
+  api-docs:
+    # /v3/api-docs で OpenAPI JSON を提供する（デフォルト値）
+    path: /v3/api-docs
+
+# ============================================================
 # ログ設定
 # ============================================================
 logging:

@@ -85,6 +85,23 @@ dependencies {
     implementation("jp.co.createlink:core")
 
     // ----------------------------------------------------------------
+    // springdoc-openapi（Swagger UI）
+    // Spring Boot 3.4.x には springdoc-openapi-starter-webmvc-ui を使用する。
+    // springdoc-openapi-ui（旧バージョン）は Spring Boot 3.x 非対応のため使用不可。
+    //
+    // バージョン 2.8.6:
+    //   - Spring Boot 3.4.x / Spring Framework 6.2.x に対応
+    //   - /swagger-ui.html で Swagger UI を提供
+    //   - /v3/api-docs で OpenAPI 3.0 JSON を提供
+    //   - @Operation, @ApiResponse 等のアノテーションをコントローラーに付与して
+    //     API ドキュメントを充実させることができる
+    //
+    // サプライチェーン対策確認済み:
+    //   2.8.6 は 2025-03-23 公開（385日以上経過）。7日間クールダウン条件を満たす。
+    // ----------------------------------------------------------------
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6")
+
+    // ----------------------------------------------------------------
     // テスト依存関係
     // spring-boot-starter-test にはJUnit 5、Mockito、MockMvcが含まれる
     // ----------------------------------------------------------------
