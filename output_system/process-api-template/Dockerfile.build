@@ -31,6 +31,6 @@ RUN ./gradlew generateSoapSources --no-daemon
 
 WORKDIR /workspace/process-api-template
 
-# bootWarでWARファイルを生成する
+# テストを実行してからbootWarでWARファイルを生成する
 # Composite Build経由でCoreが自動的にビルドされる
-RUN ./gradlew bootWar --no-daemon
+RUN ./gradlew test bootWar --no-daemon
