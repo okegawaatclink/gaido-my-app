@@ -1,0 +1,202 @@
+openapi: "3.0.3"
+info:
+  title: "Process-API Template"
+  description: |
+    Process-API テンプレートのサンプルAPI定義。
+
+    ## 概要
+    このファイルは GitHub Copilot が新規ドメイン API を実装する際の参考 SPEC として配置される。
+    springdoc-openapi が自動生成する `/v3/api-docs` とは別に、
+    Copilot がコード生成時に参照できるよう `specs/` ディレクトリに手動で配置する。
+
+    ## 新規ドメイン API 追加時の手順
+    1. このファイルをコピーして `specs/openapi/{domain}-api.yaml` として保存する
+    2. paths・components を新規ドメインに合わせて書き換える
+    3. `.github/copilot-instructions.md` の `specs/` 参照先に追記する
+  version: "1.0.0"
+  contact:
+    name: "Process-API Template Team"
+servers:
+  - url: "http://localhost:8080"
+    description: "ローカル開発環境"
+  - url: "http://localhost:8080"
+    description: "開発環境（dev プロファイル）"
+
+tags:
+  - name: "Sample"
+    description: "サンプルデータ操作 API（Core 経由で社内システムからデータ取得）"
+
+paths:
+  /api/v1/sample:
+    get:
+      summary: "サンプルデータ一覧取得"
+      description: |
+        Core 経由で社内システムからサンプルデータの一覧を取得する。
+
+        ### 実装パターン
+        - Service 層で `SampleRestClient` または `SampleSoapClient` を呼び出す
+        - 接続先未確定の場合はスタブデータ（`buildStubSampleList()`）を返す
+        - Core の接続エラーは `CoreException` として throw し、`GlobalExceptionHandler` が 500 に変換する
+      operationId: "getSampleList"
+      tags:
+        - "Sample"
+      responses:
+        "200":
+          description: "正常レスポンス"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/SampleResponse"
+              example:
+                - id: "sample-001"
+                  name: "サンプルデータ 1"
+                  data:
+                    source: "stub"
+                - id: "sample-002"
+                  name: "サンプルデータ 2"
+                  data:
+                    source: "stub"
+        "500":
+          description: "サーバーエラー（Core 接続失敗等）"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                timestamp: "2026-04-10T10:00:00.000"
+                status: 500
+                error: "Internal Server Error"
+                message: "社内システムへの接続に失敗しました"
+                path: "/api/v1/sample"
+
+  /api/v1/sample/{id}:
+    get:
+      summary: "サンプルデータ取得"
+      description: |
+        Core 経由で特定のサンプルデータを取得する。
+
+        ### 実装パターン
+        - Service 層で `SampleRestClient` または `SampleSoapClient` を使用して ID 指定取得を行う
+        - 指定 ID が存在しない場合は `NoSuchElementException` を throw する（`GlobalExceptionHandler` が 404 に変換）
+        - ID バリデーション失敗は `IllegalArgumentException` を throw する（`GlobalExceptionHandler` が 400 に変換）
+      operationId: "getSampleById"
+      tags:
+        - "Sample"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "サンプルデータの ID"
+          schema:
+            type: "string"
+            example: "sample-001"
+      responses:
+        "200":
+          description: "正常レスポンス"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SampleResponse"
+              example:
+                id: "sample-001"
+                name: "サンプルデータ 1"
+                data:
+                  source: "stub"
+        "400":
+          description: "リクエストが不正（ID が空等）"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                timestamp: "2026-04-10T10:00:00.000"
+                status: 400
+                error: "Bad Request"
+                message: "IDは空にできません"
+                path: "/api/v1/sample/"
+        "404":
+          description: "指定 ID のデータが見つからない"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                timestamp: "2026-04-10T10:00:00.000"
+                status: 404
+                error: "Not Found"
+                message: "サンプルデータが見つかりません: id=notfound"
+                path: "/api/v1/sample/notfound"
+        "500":
+          description: "サーバーエラー（Core 接続失敗等）"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+              example:
+                timestamp: "2026-04-10T10:00:00.000"
+                status: 500
+                error: "Internal Server Error"
+                message: "社内システムへの接続に失敗しました"
+                path: "/api/v1/sample/sample-001"
+
+components:
+  schemas:
+    SampleResponse:
+      type: "object"
+      description: |
+        サンプルデータレスポンス DTO。
+
+        新規ドメイン API 実装時は、このスキーマをコピーして接続先システムの
+        データ構造に合わせたフィールドを定義すること。
+      properties:
+        id:
+          type: "string"
+          description: "サンプル ID（Core 経由で取得したデータの識別子）"
+          example: "sample-001"
+        name:
+          type: "string"
+          description: "サンプル名（Core 経由で取得したデータの名称）"
+          example: "サンプルデータ 1"
+        data:
+          type: "object"
+          description: |
+            Core 経由で取得した追加データ。
+
+            新規実装時は汎用 Map ではなく接続先システムの
+            データ構造に合わせた専用 DTO に変更すること。
+          additionalProperties: true
+          example:
+            source: "stub"
+
+    ErrorResponse:
+      type: "object"
+      description: |
+        統一エラーレスポンス DTO。
+
+        `GlobalExceptionHandler`（@RestControllerAdvice）が全例外を
+        このフォーマットに変換して返す。
+        新規例外ハンドラーを追加する場合も同じフォーマットを使用すること。
+      properties:
+        timestamp:
+          type: "string"
+          format: "date-time"
+          description: "エラー発生時刻（ISO 8601 形式: yyyy-MM-dd'T'HH:mm:ss.SSS）"
+          example: "2026-04-10T10:00:00.000"
+        status:
+          type: "integer"
+          description: "HTTP ステータスコード（数値）"
+          example: 500
+        error:
+          type: "string"
+          description: "HTTP ステータス名（文字列）"
+          example: "Internal Server Error"
+        message:
+          type: "string"
+          description: "エラーメッセージ（人間が読める形式）"
+          example: "社内システムへの接続に失敗しました"
+        path:
+          type: "string"
+          description: "エラーが発生したリクエストパス"
+          example: "/api/v1/sample"
