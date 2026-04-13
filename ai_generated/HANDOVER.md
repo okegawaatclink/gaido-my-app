@@ -41,7 +41,14 @@ output_system/
     ├── settings.gradle.kts            # rootProject.name="process-api-template", includeBuild("../core")
     ├── gradlew, gradlew.bat           # Gradle 8.12.1 Wrapper
     ├── gradle/wrapper/
-    ├── Dockerfile.build               # WSL環境でのビルド確認用（.gitignore対象ではない）
+    ├── Dockerfile.build               # WSL環境でのビルド確認用（test bootWar）
+    ├── README.md                      # プロジェクト概要・ビルド・起動・Swagger UIアクセス手順
+    ├── CONTRIBUTING.md                # 新規ドメインAPI追加6ステップ手順・レイヤー構成説明
+    ├── .github/
+    │   └── copilot-instructions.md   # VibeCoding向けCopilot指示（技術スタック・テストパターン）
+    ├── specs/
+    │   └── openapi/
+    │       └── process-api.yaml      # Copilot参照用OpenAPI 3.0.3定義
     └── src/
         ├── main/
         │   ├── java/jp/co/createlink/processapi/
@@ -61,7 +68,7 @@ output_system/
         │       └── logback-spring.xml                 # プロファイル別ログフォーマット（local:カラー/dev:テキスト/prod:JSON）
         └── test/java/jp/co/createlink/processapi/
             ├── actuator/ActuatorEndpointTest.java     # Actuator統合テスト（@SpringBootTest + MockMvc）
-            ├── controller/SampleControllerTest.java   # MockMvcテスト
+            ├── controller/SampleControllerTest.java   # MockMvcテストパターン（200/400/404/500）
             ├── exception/GlobalExceptionHandlerTest.java # エラーハンドリングテスト
             └── service/SampleServiceTest.java         # サービスユニットテスト
 ```
@@ -124,3 +131,4 @@ cd output_system/process-api-template
 - PBI #6: Process-APIテンプレートのGradleプロジェクト基盤（bootWar/bootRun動作確認済み）
 - PBI #7: サンプルAPIエンドポイント・Swagger UI・統一エラーハンドリング（springdoc-openapi 2.8.6 + @ControllerAdvice + ErrorResponse）
 - PBI #8: Spring Actuatorヘルスチェック・プロファイル別設定（/actuator/health,liveness,readiness,info,metrics + application-{local,dev,prod}.yml + logback-spring.xml）
+- PBI #9: テストテンプレートとドキュメント整備（SampleControllerTest MockMvcパターン + specs/openapi/process-api.yaml + README.md + CONTRIBUTING.md + .github/copilot-instructions.md）
